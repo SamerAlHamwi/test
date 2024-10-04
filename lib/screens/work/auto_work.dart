@@ -52,9 +52,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
         children: [
           SizedBox(height: 16,width: MediaQuery.of(context).size.width,),
           ElevatedButton(
-            onPressed: () async {
-              runAutoCaptcha();
-            },
+            onPressed: _isLoading ? stopAutoCaptcha : runAutoCaptcha,
             child: _isLoading ? const Text('جاري التثبيت') : const Text('أبدأ'),
           ),
           const SizedBox(height: 10,),
@@ -91,10 +89,13 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     );
   }
 
+  Timer? _captchaTimer; // Reference to store the Timer
+
   void runAutoCaptcha() {
     setState(() {
       _isLoading = true;
     });
+
     // List of 6 integers representing seconds
     List<int> intervals = SettingsData.getTimes();
 
@@ -102,13 +103,16 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     const durationLimit = Duration(minutes: 5);
     DateTime startTime = DateTime.now(); // Start time
 
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       // Get the elapsed time
       Duration elapsedTime = DateTime.now().difference(startTime);
 
       // Stop the timer after 5 minutes
       if (elapsedTime >= durationLimit) {
         timer.cancel();
+        setState(() {
+          _isLoading = false; // Update state after process completion
+        });
         print('Process completed after 5 minutes');
         return;
       }
@@ -117,46 +121,53 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
         int currentInterval = intervals[i];
 
         if (elapsedTime.inSeconds == currentInterval) {
-          switch (i){
+          switch (i) {
             case 0:
-              if(SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession1.isNotEmpty){
-                getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!,0);
+              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession1.isNotEmpty) {
+                getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
               }
               break;
             case 1:
-              if(SettingsData.getProcesses1!.pRECORDCOUNT! > 1 && SettingsData.getSession1.isNotEmpty){
-                getCaptcha(SettingsData.getProcesses1!.pRESULT![1].pROCESSID!,0);
+              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 1 && SettingsData.getSession1.isNotEmpty) {
+                getCaptcha(SettingsData.getProcesses1!.pRESULT![1].pROCESSID!, 0);
               }
               break;
             case 2:
-              if(SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession2.isNotEmpty){
-                getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!,1);
+              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession2.isNotEmpty) {
+                getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
               }
               break;
             case 3:
-              if(SettingsData.getProcesses1!.pRECORDCOUNT! > 1 && SettingsData.getSession2.isNotEmpty){
-                getCaptcha(SettingsData.getProcesses2!.pRESULT![1].pROCESSID!,1);
+              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 1 && SettingsData.getSession2.isNotEmpty) {
+                getCaptcha(SettingsData.getProcesses2!.pRESULT![1].pROCESSID!, 1);
               }
               break;
             case 4:
-              if(SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession3.isNotEmpty){
-                getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!,2);
+              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession3.isNotEmpty) {
+                getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
               }
               break;
             case 5:
-              if(SettingsData.getProcesses1!.pRECORDCOUNT! > 1 && SettingsData.getSession3.isNotEmpty){
-                getCaptcha(SettingsData.getProcesses3!.pRESULT![1].pROCESSID!,2);
+              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 1 && SettingsData.getSession3.isNotEmpty) {
+                getCaptcha(SettingsData.getProcesses3!.pRESULT![1].pROCESSID!, 2);
               }
               break;
           }
         }
       }
     });
-
-    setState(() {
-      _isLoading = false;
-    });
   }
+
+  void stopAutoCaptcha() {
+    if (_captchaTimer != null && _captchaTimer!.isActive) {
+      _captchaTimer!.cancel(); // Stop the timer
+      setState(() {
+        _isLoading = false; // Update the state
+      });
+      print('AutoCaptcha stopped manually');
+    }
+  }
+
 
   Future<bool> getCaptcha(int id,int userIndex) async {
 
