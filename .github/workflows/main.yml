@@ -1,0 +1,55 @@
+name: Build Windows App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.3'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Ensure Windows platform is enabled
+        run: flutter config --enable-windows-desktop
+
+      #- name: Create Windows platform (if necessary)
+       # run: flutter create .
+
+      - name: Build Windows application
+        run: |
+          flutter build windows
+          echo "Build completed"
+
+      # Debugging step: List the entire build directory structure
+      - name: List build directory
+        run: dir build
+
+      - name: List build/windows directory
+        run: dir build/windows
+
+      - name: List build/windows/x64 directory
+        run: dir build/windows/x64
+
+      - name: List build/windows/x64/runner directory
+        run: dir build/windows/x64/runner
+
+      - name: List build/windows/x64/runner/Release directory
+        run: dir build/windows/x64/runner/Release
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-build
+          path: build/windows/x64/runner/Release/
