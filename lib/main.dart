@@ -3,6 +3,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:king/screens/accounts/login_accounts.dart';
+import 'package:king/screens/password/password_screen.dart';
 import 'package:king/screens/settings/settings.dart';
 import 'package:king/screens/work_type/select_work_type_screen.dart';
 import 'package:king/utils/keys.dart';
@@ -46,8 +47,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      // home: const PasswordScreen(),
-      home: SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
+      home: const PasswordScreen(),
+      // home: SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
     );
   }
 }
