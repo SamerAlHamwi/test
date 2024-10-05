@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      // home: const PasswordScreen(),
-      home: SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
+      home: const PasswordScreen(),
+      // home: SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
     );
   }
 }
