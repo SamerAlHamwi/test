@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../accounts/login_accounts.dart';
+import '../login_accounts/login_accounts.dart';
 import '../settings/settings.dart';
 import '../time/select_time screen.dart';
 import '../work/manual_work.dart';

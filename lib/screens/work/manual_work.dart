@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:king/screens/accounts/login_accounts.dart';
+import 'package:king/screens/login_accounts/login_accounts.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../../constants/constants.dart';
@@ -88,13 +88,15 @@ class _ManualScreenState extends State<ManualScreen> with AutomaticKeepAliveClie
     );
   }
 
-  getCaptchaForAllUsers(){
+  getCaptchaForAllUsers() async {
     if(SettingsData.getSession1.isNotEmpty){
       getCaptcha(SettingsData.getProcesses1!.pRESULT!.first.pROCESSID!,0);
     }
+    await Future.delayed(const Duration(milliseconds: 150));
     if(SettingsData.getSession2.isNotEmpty){
       getCaptcha(SettingsData.getProcesses2!.pRESULT!.first.pROCESSID!,1);
     }
+    await Future.delayed(const Duration(milliseconds: 150));
     if(SettingsData.getSession3.isNotEmpty){
       getCaptcha(SettingsData.getProcesses3!.pRESULT!.first.pROCESSID!,2);
     }

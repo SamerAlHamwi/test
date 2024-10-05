@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:king/models/user_model.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -28,6 +29,15 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
   final List<TextEditingController> phoneControllers = List.generate(3, (index) => TextEditingController());
   final List<TextEditingController> passwordControllers = List.generate(3, (index) => TextEditingController());
   bool _isLoading = false;
+  List<UserModel> suggestions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    suggestions = SettingsData.getSavedUsers();
+    print(suggestions);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +65,7 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
                       Text(getLoginTitle(index),),
                       const SizedBox(height: 10),
                       // Phone Number TextField
-                      getPhoneNumberTextField(phoneControllers[index]),
+                      getPhoneNumberTextField(index),
                       const SizedBox(height: 10),
                       // Password TextField
                       getPasswordTextField(passwordControllers[index]),
@@ -69,6 +79,13 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
                   bool success = await loginToThreeAccounts();
                   if(success){
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const SelectWorkType()));
+                  }else{
+                    showTopSnackBar(
+                      Overlay.of(context),
+                      const CustomSnackBar.error(
+                        message: 'فشلت عملية تسجيل الدخول',
+                      ),
+                    );
                   }
                 },
                 child: _isLoading ? const Text('يتم التحميل...') : const Text('تسجيل الدخول'),
@@ -79,23 +96,51 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
       ),
     );
   }
+//
+
+  List<String> suggestion = ['0945718880'];
 
 
+  getPhoneNumberTextField(int index){
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return const Iterable<String>.empty();
+        }
+        return suggestions.map((e) => e.phoneNumber ?? '').where((String option) {
+          return option.startsWith(textEditingValue.text);
+        });
+      },
 
-  getPhoneNumberTextField(TextEditingController controller){
-    return TextField(
-      controller: controller,
-      keyboardType: TextInputType.phone,
-      decoration: const InputDecoration(
-        labelText: 'رقم الموبايل',
-        labelStyle: TextStyle(
-          fontSize: 12,
-        ),
-        contentPadding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-        border: OutlineInputBorder(),
-      ),
+      onSelected: (String selection) {
+        phoneControllers[index].text = selection;
+        passwordControllers[index].text = suggestions.where((element) => element.phoneNumber! == selection).first.password!;
+        setState(() {});
+      },
+      fieldViewBuilder: (BuildContext context,
+          TextEditingController phoneNu,
+          FocusNode focusNode,
+          VoidCallback onFieldSubmitted) {
+        return TextField(
+          controller: phoneNu,
+          keyboardType: TextInputType.phone,
+          focusNode: focusNode,
+          onChanged: (value){
+            phoneControllers[index].text = value;
+          },
+          decoration: const InputDecoration(
+            labelText: 'رقم الموبايل',
+            labelStyle: TextStyle(
+              fontSize: 12,
+            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+            border: OutlineInputBorder(),
+          ),
+        );
+      },
     );
   }
+
 
   getPasswordTextField(TextEditingController controller){
     return TextField(
@@ -161,6 +206,7 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
         if (match != null) {
           String sessionValue = match.group(1)!;
           LoginModel model = LoginModel.fromJson(data);
+          SettingsData.addSavedUser(UserModel(phoneNumber: userName, password: password));
           switch(index){
             case 0:
               SettingsData.setSession1(sessionValue);
@@ -199,7 +245,6 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
         return false;
       }
     } on DioException catch (e) {
-      print(e);
       String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
 
       showTopSnackBar(
@@ -210,7 +255,6 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
       );
       return false;
     } catch (e) {
-      print(e);
       showTopSnackBar(
         Overlay.of(context),
         const CustomSnackBar.error(

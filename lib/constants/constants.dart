@@ -1,10 +1,4 @@
 
-
-
-const String pageOne = 'page1.mp3';
-const String pageTwo = 'page2.mp3';
-const String pageThree = 'page3.mp3';
-const String pageFour = 'page4.mp3';
 const String alertSound = 'alert.mp3';
 
 

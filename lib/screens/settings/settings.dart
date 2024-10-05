@@ -1,11 +1,9 @@
 
-
-
-import 'dart:io';
-
 import 'package:get_storage/get_storage.dart';
 import 'package:king/models/login_model.dart';
 import 'package:king/models/process_model.dart';
+
+import '../../models/user_model.dart';
 
 class SettingsData {
 
@@ -22,6 +20,7 @@ class SettingsData {
   static String userKey3 = 'user3';
   static String typeKey = 'type';
   static String timesKey = 'times';
+  static String usersKey = 'users';
 
   static String alias = '';
 
@@ -76,6 +75,22 @@ class SettingsData {
   static setType(bool isMobile){
     box.write(typeKey, isMobile);
   }
+
+  static addSavedUser(UserModel user) {
+    List<UserModel> savedUsers = ((box.read(usersKey) ?? []) as List).map((e) => UserModel.fromJson(e)).toList();
+    List<String?> phoneNumbers = savedUsers.map((e) => e.phoneNumber).toList();
+    if(!phoneNumbers.contains(user.phoneNumber)){
+      savedUsers.add(user);
+    }
+    box.write(usersKey,savedUsers.map((e) => e.toJson()).toList());
+  }
+
+  static List<UserModel> getSavedUsers() {
+    List<UserModel> savedUsers = ((box.read(usersKey) ?? []) as List).map((e) => UserModel.fromJson(e)).toList();
+    return savedUsers;
+  }
+
+
 
   static hasToken(){
     if(getSession1.isNotEmpty || getSession1.isNotEmpty || getSession1.isNotEmpty){
@@ -138,6 +153,7 @@ class SettingsData {
   static LoginModel? get getUser3 {
     return LoginModel.fromJson(box.read(userKey3));
   }
+
 
 }
 
