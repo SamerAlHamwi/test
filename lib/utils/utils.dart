@@ -50,7 +50,7 @@ class Utils {
       //OPSyGCrxPB notifications
     }
 
-    final Map<String,dynamic> headers = {
+    final Map<String,String> headers = {
       'Content-Type': 'application/json'
     };
 
@@ -132,6 +132,10 @@ class Utils {
       persistentConnection: true,
       followRedirects: true,
     );
+  }
+
+  static Map<String, String> getOptions2(AliasEnum type, int userIndex) {
+    return getHeaders(type, userIndex);  // Ensure getHeaders returns Map<String, String>
   }
 
 

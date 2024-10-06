@@ -1,7 +1,8 @@
 
 
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:king/models/user_model.dart';
@@ -179,7 +180,109 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
     return true;
   }
 
-  Future<bool> login({required String userName,required String password,required int index}) async {
+  // Future<bool> login({
+  //   required String userName,
+  //   required String password,
+  //   required int index,
+  // }) async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //
+  //   const String loginUrl = 'https://api.ecsc.gov.sy:8080/secure/auth/login';
+  //
+  //   HttpClient client = HttpClient()
+  //     ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  //
+  //   try {
+  //     // Make the HTTP POST request
+  //     final response = await http.post(
+  //       Uri.parse(loginUrl),
+  //       headers: Utils.getOptions2(AliasEnum.none, index), // Add your custom headers here
+  //       body: jsonEncode({
+  //         'username': userName,
+  //         'password': password,
+  //       }),
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       final Map<String, dynamic> data = jsonDecode(response.body);
+  //
+  //       // Extract session from 'set-cookie' header
+  //       String? session = response.headers['set-cookie'];
+  //       if (session != null) {
+  //         RegExp regExp = RegExp(r'SESSION=([^;]+)');
+  //         Match? match = regExp.firstMatch(session);
+  //         if (match != null) {
+  //           String sessionValue = match.group(1)!;
+  //           LoginModel model = LoginModel.fromJson(data);
+  //           SettingsData.addSavedUser(
+  //               UserModel(phoneNumber: userName, password: password));
+  //
+  //           // Store session and user info
+  //           switch (index) {
+  //             case 0:
+  //               SettingsData.setSession1(sessionValue);
+  //               SettingsData.setUser1(data);
+  //               break;
+  //             case 1:
+  //               SettingsData.setSession2(sessionValue);
+  //               SettingsData.setUser2(data);
+  //               break;
+  //             case 2:
+  //               SettingsData.setSession3(sessionValue);
+  //               SettingsData.setUser3(data);
+  //               break;
+  //           }
+  //
+  //           showTopSnackBar(
+  //             Overlay.of(context),
+  //             CustomSnackBar.success(
+  //               message:
+  //               'مرحباً ${model.pPROFILERESULT!.fULLNAME} تم تسجيل الدخول بنجاح، جاري تحضير المعاملات',
+  //             ),
+  //           );
+  //         }
+  //
+  //         // Refresh the state and get processes
+  //         setState(() {});
+  //         bool isSuccess = await Utils.getMyProcesses(index);
+  //         return isSuccess;
+  //       } else {
+  //         throw Exception('Session cookie not found');
+  //       }
+  //     } else {
+  //       final responseBody = jsonDecode(response.body);
+  //       final message = responseBody['Message'];
+  //
+  //       showTopSnackBar(
+  //         Overlay.of(context),
+  //         CustomSnackBar.error(message: message),
+  //       );
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //     String errorMessage = e is http.ClientException
+  //         ? 'An unexpected network error occurred.'
+  //         : 'An unexpected error occurred.';
+  //
+  //     showTopSnackBar(
+  //       Overlay.of(context),
+  //       CustomSnackBar.error(
+  //         message: errorMessage,
+  //       ),
+  //     );
+  //     return false;
+  //   } finally {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
+
+
+Future<bool> login({required String userName,required String password,required int index}) async {
     setState(() {
       _isLoading = true;
     });

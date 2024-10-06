@@ -20,12 +20,21 @@ class SettingsData {
   static String userKey3 = 'user3';
   static String typeKey = 'type';
   static String timesKey = 'times';
+  static String timeKey = 'time';
   static String usersKey = 'users';
 
   static String alias = '';
 
   static init() async {
     await GetStorage.init(storageName);
+  }
+
+  static setTime(int time){
+    box.write(timeKey, time);
+  }
+
+  static getTime(){
+    return box.read(timeKey) ?? 5;
   }
 
   static setTimes(List<int> times){

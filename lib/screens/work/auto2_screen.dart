@@ -2,6 +2,8 @@
 
 
 
+
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -19,17 +21,18 @@ import '../../widgets/clock_widget.dart';
 import '../settings/settings.dart';
 
 
-class AutoWorkScreen extends StatefulWidget {
+class AutoWorkScreen2 extends StatefulWidget {
 
-  const AutoWorkScreen({super.key});
+  const AutoWorkScreen2({super.key});
 
   @override
-  State<AutoWorkScreen> createState() => _AutoWorkScreenState();
+  State<AutoWorkScreen2> createState() => _AutoWorkScreen2State();
 }
 
-class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAliveClientMixin {
+class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAliveClientMixin {
 
   bool _isLoading = false;
+  bool _isLoadingProcesses = false;
   List<String> messages = [];
 
   @override
@@ -38,7 +41,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'التثبيت',
+          'الحرق',
           style: TextStyle(
               color: Colors.blue
           ),
@@ -54,6 +57,11 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
           ElevatedButton(
             onPressed: _isLoading ? stopAutoCaptcha : runAutoCaptcha,
             child: _isLoading ? const Text('جاري التثبيت') : const Text('أبدأ'),
+          ),
+          const SizedBox(height: 10,),
+          ElevatedButton(
+            onPressed: refreshProcesses,
+            child: _isLoadingProcesses ? const Text('جاري التحميل') : const Text('تحديث المعاملات'),
           ),
           const SizedBox(height: 10,),
           const StreamClockWidget(),
@@ -89,70 +97,59 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     );
   }
 
-  Timer? _captchaTimer; // Reference to store the Timer
+  Timer? _captchaTimer;
+
+  void refreshProcesses() async {
+    setState(() {
+      _isLoadingProcesses = true;
+    });
+    for(int i = 0;i < 3; i++){
+      bool isSuccess = await Utils.getMyProcesses(i);
+      if(!isSuccess){
+        break;
+      }
+    }
+    setState(() {
+      _isLoadingProcesses = false;
+    });
+  }
 
   void runAutoCaptcha() {
     setState(() {
       _isLoading = true;
     });
 
-    // List of 6 integers representing seconds
-    List<int> intervals = SettingsData.getTimes();
+    int time = SettingsData.getTime();
 
-    // Total time limit (5 minutes)
-    const durationLimit = Duration(minutes: 5);
-    DateTime startTime = DateTime.now(); // Start time
+    const durationLimit = Duration(minutes: 120); // Run for 60 minutes
+    DateTime startTime = DateTime.now();
 
-    _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       // Get the elapsed time
       Duration elapsedTime = DateTime.now().difference(startTime);
 
-      // Stop the timer after 5 minutes
+      // Stop the timer after 60 minutes
       if (elapsedTime >= durationLimit) {
         timer.cancel();
         setState(() {
-          _isLoading = false; // Update state after process completion
+          _isLoading = false;
         });
-        print('Process completed after 5 minutes');
         return;
       }
 
-      for (int i = 0; i < intervals.length; i++) {
-        int currentInterval = intervals[i];
-
-        if (elapsedTime.inSeconds == currentInterval) {
-          switch (i) {
-            case 0:
-              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession1.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
-              }
-              break;
-            case 1:
-              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 1 && SettingsData.getSession1.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses1!.pRESULT![1].pROCESSID!, 0);
-              }
-              break;
-            case 2:
-              if (SettingsData.getProcesses2!.pRECORDCOUNT! > 0 && SettingsData.getSession2.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
-              }
-              break;
-            case 3:
-              if (SettingsData.getProcesses2!.pRECORDCOUNT! > 1 && SettingsData.getSession2.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses2!.pRESULT![1].pROCESSID!, 1);
-              }
-              break;
-            case 4:
-              if (SettingsData.getProcesses3!.pRECORDCOUNT! > 0 && SettingsData.getSession3.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
-              }
-              break;
-            case 5:
-              if (SettingsData.getProcesses3!.pRECORDCOUNT! > 1 && SettingsData.getSession3.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses3!.pRESULT![1].pROCESSID!, 2);
-              }
-              break;
-          }
+      // Check if we are at the time second (same as the "time" variable)
+      // and if 6 minutes (or a multiple) have passed
+      if (elapsedTime.inMinutes % 6 == 0 && elapsedTime.inSeconds % 60 == time) {
+        if (SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession1.isNotEmpty) {
+          getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
+        }
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (SettingsData.getProcesses2!.pRECORDCOUNT! > 0 && SettingsData.getSession2.isNotEmpty) {
+          getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
+        }
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (SettingsData.getProcesses3!.pRECORDCOUNT! > 0 && SettingsData.getSession3.isNotEmpty) {
+          getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
         }
       }
     });
@@ -160,14 +157,13 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
 
   void stopAutoCaptcha() {
     if (_captchaTimer != null && _captchaTimer!.isActive) {
-      _captchaTimer!.cancel(); // Stop the timer
+      _captchaTimer!.cancel();
       setState(() {
-        _isLoading = false; // Update the state
+        _isLoading = false;
       });
       print('AutoCaptcha stopped manually');
     }
   }
-
 
   Future<bool> getCaptcha(int id,int userIndex) async {
 
