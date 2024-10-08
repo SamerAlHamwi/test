@@ -21,6 +21,7 @@ class SettingsData {
   static String typeKey = 'type';
   static String timesKey = 'times';
   static String timeKey = 'time';
+  static String time2Key = 'time2';
   static String usersKey = 'users';
 
   static String alias = '';
@@ -35,6 +36,14 @@ class SettingsData {
 
   static getTime(){
     return box.read(timeKey) ?? 5;
+  }
+
+  static setTime2(int time2){
+    box.write(time2Key, time2);
+  }
+
+  static getTime2(){
+    return box.read(time2Key) ?? 5;
   }
 
   static setTimes(List<int> times){

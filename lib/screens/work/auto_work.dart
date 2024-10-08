@@ -1,21 +1,12 @@
 
 
-
-
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:audioplayers/audioplayers.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:king/screens/login_accounts/login_accounts.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import '../../constants/constants.dart';
-import '../../models/alias_enum.dart';
-import '../../utils/dio_client.dart';
+import '../../utils/captcha_utils.dart';
 import '../../utils/utils.dart';
 import '../../widgets/clock_widget.dart';
+import '../../widgets/messages_widget.dart';
 import '../settings/settings.dart';
 
 
@@ -31,8 +22,6 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
 
   bool _isLoading = false;
   bool _isLoadingProcesses = false;
-  List<String> messages = [];
-  List<int> minutes = [3,9,14,15,21,27,33,39,45,51,57];
 
   @override
   Widget build(BuildContext context) {
@@ -65,33 +54,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
           const SizedBox(height: 10,),
           const StreamClockWidget(),
           const SizedBox(height: 10,),
-          Container(
-            width: 300,
-            height: 400,
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: ListView(
-                reverse: true,
-                children: List.generate(messages.length, (index) => Text(
-                    messages[index],
-                  style: TextStyle(
-                      fontSize: 12,
-                    color:
-                    messages[index].contains('تم') ?
-                    Colors.green :
-                    messages[index].contains('Get') ?
-                        Colors.blue :
-                    Colors.red,
-                  ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          const MessageStreamWidget(),
           const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: () async {
@@ -117,15 +80,15 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
 
   getCaptchaForAllUsers() async {
     if(SettingsData.getSession1.isNotEmpty){
-      getCaptcha(SettingsData.getProcesses1!.pRESULT!.first.pROCESSID!,0);
+      CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT!.first.pROCESSID!,0);
     }
     await Future.delayed(const Duration(milliseconds: 100));
     if(SettingsData.getSession2.isNotEmpty){
-      getCaptcha(SettingsData.getProcesses2!.pRESULT!.first.pROCESSID!,1);
+      CaptchaUtils.getCaptcha(SettingsData.getProcesses2!.pRESULT!.first.pROCESSID!,1);
     }
     await Future.delayed(const Duration(milliseconds: 100));
     if(SettingsData.getSession3.isNotEmpty){
-      getCaptcha(SettingsData.getProcesses3!.pRESULT!.first.pROCESSID!,2);
+      CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT!.first.pROCESSID!,2);
     }
   }
 
@@ -155,61 +118,56 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
       _isLoading = true;
     });
 
-    // List of 6 integers representing seconds
     List<int> intervals = SettingsData.getTimes();
 
-    // Total time limit (5 minutes)
     const durationLimit = Duration(minutes: 150);
-    DateTime startTime = DateTime.now(); // Start time
+    DateTime startTime = DateTime.now();
 
     _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      // Get the elapsed time
       Duration elapsedTime = DateTime.now().difference(startTime);
 
-      // Stop the timer after 5 minutes
       if (elapsedTime >= durationLimit) {
         timer.cancel();
         setState(() {
-          _isLoading = false; // Update state after process completion
+          _isLoading = false;
         });
-        print('Process completed after 5 minutes');
         return;
       }
 
       for (int i = 0; i < intervals.length; i++) {
         int currentInterval = intervals[i];
-        DateTime now = DateTime.now();
+        DateTime now = CaptchaUtils.getCurrentTime();
 
         if (now.second == currentInterval) {
           switch (i) {
             case 0:
-              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession1.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
+              if (SettingsData.getSession1.isNotEmpty) {
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
               }
               break;
             case 1:
-              if (SettingsData.getProcesses1!.pRECORDCOUNT! > 1 && SettingsData.getSession1.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses1!.pRESULT![1].pROCESSID!, 0);
+              if (SettingsData.getSession1.isNotEmpty) {
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT![1].pROCESSID!, 0);
               }
               break;
             case 2:
-              if (SettingsData.getProcesses2!.pRECORDCOUNT! > 0 && SettingsData.getSession2.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
+              if (SettingsData.getSession2.isNotEmpty) {
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
               }
               break;
             case 3:
-              if (SettingsData.getProcesses2!.pRECORDCOUNT! > 1 && SettingsData.getSession2.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses2!.pRESULT![1].pROCESSID!, 1);
+              if (SettingsData.getSession2.isNotEmpty) {
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses2!.pRESULT![1].pROCESSID!, 1);
               }
               break;
             case 4:
-              if (SettingsData.getProcesses3!.pRECORDCOUNT! > 0 && SettingsData.getSession3.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
+              if (SettingsData.getSession3.isNotEmpty) {
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
               }
               break;
             case 5:
-              if (SettingsData.getProcesses3!.pRECORDCOUNT! > 1 && SettingsData.getSession3.isNotEmpty) {
-                getCaptcha(SettingsData.getProcesses3!.pRESULT![1].pROCESSID!, 2);
+              if (SettingsData.getSession3.isNotEmpty) {
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT![1].pROCESSID!, 2);
               }
               break;
           }
@@ -220,160 +178,11 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
 
   void stopAutoCaptcha() {
     if (_captchaTimer != null && _captchaTimer!.isActive) {
-      _captchaTimer!.cancel(); // Stop the timer
+      _captchaTimer!.cancel();
       setState(() {
-        _isLoading = false; // Update the state
+        _isLoading = false;
       });
       print('AutoCaptcha stopped manually');
-    }
-  }
-
-
-  Future<bool> getCaptcha(int id,int userIndex) async {
-
-    final captchaUrl = 'https://api.ecsc.gov.sy:8080/files/fs/captcha/$id';
-
-    final Dio dio = DioClient.getDio();
-
-    try {
-      final response = await dio.get(captchaUrl, options: Utils.getOptions(AliasEnum.none,userIndex));
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = response.data;
-        final String imageUrl = data['file'];
-        Utils.solveCaptcha({
-          'img_url': 'data:image/jpg;base64,$imageUrl',
-          'captcha': 1,
-        }).then((value){
-          if(value != -1){
-            reservePassport(id,value,userIndex);
-          }
-        });
-        messages.add(getCaptchaReceivedMessage(userIndex));
-        setState(() {});
-
-        return true;
-      } else {
-        final responseBody = json.decode(response.data);
-        final message = responseBody['Message'];
-
-        // showTopSnackBar(
-        //   Overlay.of(context),
-        //   CustomSnackBar.error(
-        //     message: message,
-        //   ),
-        // );
-        return false;
-      }
-    } on DioException catch (e) {
-      String errorMessage = e.response?.data['Message'] ?? 'حدث خطأ اثناء طلب المعادلة';
-
-      if(errorMessage.contains('تجاوزت') || errorMessage.contains('معالجة')){
-        showTopSnackBar(
-          Overlay.of(context),
-          CustomSnackBar.info(
-            message: errorMessage,
-          ),
-        );
-        Utils.playAudio(AudioPlayer(),alertSound);
-      }else{
-        messages.add(getNoCaptchaMessage(userIndex));
-        setState(() {});
-        // showTopSnackBar(
-        //   Overlay.of(context),
-        //   CustomSnackBar.error(
-        //     message: errorMessage,
-        //   ),
-        // );
-      }
-      return false;
-    } catch (e) {
-      showTopSnackBar(
-        Overlay.of(context),
-        const CustomSnackBar.error(
-          message: 'An unexpected error occurred. Please try again.',
-        ),
-      );
-      return false;
-    } finally {
-
-    }
-  }
-
-  Future<void> reservePassport(int id, int captcha,int userIndex) async {
-    final reserveUrl = 'https://api.ecsc.gov.sy:8080/rs/reserve?id=$id&captcha=$captcha';
-    final Dio dio = DioClient.getDio();
-
-    for(int i = 0;i < 5;i++){
-      try {
-        final response = await dio.get(reserveUrl, options: Utils.getOptions(AliasEnum.reserve,userIndex));
-
-        if (response.statusCode == 200) {
-          showTopSnackBar(
-            Overlay.of(context),
-            const CustomSnackBar.success(
-              message: "تم تثبيت المعاملة بنجاح",
-            ),
-          );
-          messages.add(getPassportReservedMessage(userIndex));
-          setState(() {});
-          break;
-        }
-      } on DioException catch (e) {
-        String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
-
-        showTopSnackBar(
-          Overlay.of(context),
-          CustomSnackBar.error(
-            message: errorMessage,
-          ),
-        );
-        if(errorMessage.contains('نأسف') || errorMessage.contains('النتيجة')){
-          break;
-        }
-      } catch (e) {
-        showTopSnackBar(
-          Overlay.of(context),
-          const CustomSnackBar.error(
-            message: 'An unexpected error occurred. Please try again.',
-          ),
-        );
-      }
-      await Future.delayed(const Duration(milliseconds: 500));
-    }
-  }
-
-  getCaptchaReceivedMessage(int userIndex){
-    switch(userIndex){
-      case 0:
-        return '${SettingsData.getUser1!.pPROFILERESULT!.fULLNAME ?? ''} Get Captcha';
-      case 1:
-        return '${SettingsData.getUser2!.pPROFILERESULT!.fULLNAME ?? ''} Get Captcha';
-      case 2:
-        return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} Get Captcha';
-    }
-  }
-
-  getNoCaptchaMessage(int userIndex){
-    switch(userIndex){
-      case 0:
-        return '${SettingsData.getUser1!.pPROFILERESULT!.fULLNAME ?? ''} NO Captcha';
-      case 1:
-        return '${SettingsData.getUser2!.pPROFILERESULT!.fULLNAME ?? ''} NO Captcha';
-      case 2:
-        return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} NO Captcha';
-    }
-  }
-
-  getPassportReservedMessage(int userIndex){
-    Utils.playAudio(AudioPlayer(),alertSound);
-    switch(userIndex){
-      case 0:
-        return '${SettingsData.getUser1!.pPROFILERESULT!.fULLNAME ?? ''} تم التثبيت بنجاح ';
-      case 1:
-        return '${SettingsData.getUser2!.pPROFILERESULT!.fULLNAME ?? ''} تم التثبيت بنجاح ';
-      case 2:
-        return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} تم التثبيت بنجاح ';
     }
   }
 

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +20,7 @@ class _StreamClockWidgetState extends State<StreamClockWidget> {
   Stream<String> _createClockStream() async* {
     while (true) {
       await Future.delayed(const Duration(seconds: 1));
-      yield _formatDateTime(DateTime.now());
+      yield _formatDateTime(DateTime.now().toUtc().add(const Duration(hours: 3)));
     }
   }
 

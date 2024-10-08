@@ -18,19 +18,20 @@ class SelectOneTimeScreen extends StatefulWidget {
 class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
 
   int time = 0;
+  int time2 = 0;
 
-  void increment() {
+  void increment(int value) {
     setState(() {
-      if (time < 60) {
-        time++;
+      if (value < 60) {
+        value++;
       }
     });
   }
 
-  void decrement() {
+  void decrement(int value) {
     setState(() {
-      if (time > 0) {
-        time--;
+      if (value > 0) {
+        value--;
       }
     });
   }
@@ -53,7 +54,7 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.remove),
-                  onPressed: () => decrement(),
+                  onPressed: () => decrement(time),
                 ),
                 Text(
                   time.toString(),
@@ -61,7 +62,25 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
-                  onPressed: () => increment(),
+                  onPressed: () => increment(time),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: () => decrement(time2),
+                ),
+                Text(
+                  time2.toString(),
+                  style: const TextStyle(fontSize: 24),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => increment(time2),
                 ),
               ],
             ),
@@ -70,6 +89,7 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
             ElevatedButton(
               onPressed: () async {
                 SettingsData.setTime(time);
+                SettingsData.setTime2(time2);
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> const AutoWorkScreen2()));
               },
               child: const Text('حفظ'),
