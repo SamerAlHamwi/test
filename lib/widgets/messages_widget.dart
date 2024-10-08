@@ -3,7 +3,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-final StreamController<List<String>> messageController = StreamController();
+import 'package:king/utils/messages_utils.dart';
+
+StreamController<List<String>> messageController = StreamController<List<String>>.broadcast();
+
 
 class MessageStreamWidget extends StatefulWidget {
   const MessageStreamWidget({super.key});
@@ -18,13 +21,21 @@ class _MessageStreamWidgetState extends State<MessageStreamWidget> {
   @override
   void initState() {
     super.initState();
+    resetMessages();
   }
+
+  resetMessages(){
+    messageController = StreamController<List<String>>.broadcast();
+    messages = [];
+  }
+
 
   @override
   void dispose() {
     messageController.close();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +50,7 @@ class _MessageStreamWidgetState extends State<MessageStreamWidget> {
       child: Center(
         child: StreamBuilder<List<String>>(
           stream: messageController.stream,
-          initialData: [], // Initial empty data
+          initialData: const [],
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const SizedBox();
@@ -52,13 +63,7 @@ class _MessageStreamWidgetState extends State<MessageStreamWidget> {
                 messages[index],
                 style: TextStyle(
                   fontSize: 12,
-                  color: messages[index].contains('تم')
-                      ? Colors.green
-                      : messages[index].contains('Get')
-                      ? Colors.blue
-                      : messages[index].contains('Request')
-                      ? Colors.black
-                      : Colors.red,
+                  color: getTextColor(messages,index)
                 ),
               )),
             );
@@ -66,5 +71,19 @@ class _MessageStreamWidgetState extends State<MessageStreamWidget> {
         ),
       ),
     );
+  }
+
+  getTextColor(List messages,int index){
+    if(messages[index].contains('تم')){
+      return Colors.green;
+    }else if(messages[index].contains('Get')){
+      return Colors.blue;
+    }else if(messages[index].contains('Request')){
+      return Colors.black;
+    }else if(messages[index].contains('حدث')){
+      return Colors.grey;
+    }else{
+      return Colors.red;
+    }
   }
 }
