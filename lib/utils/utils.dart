@@ -64,13 +64,13 @@ class Utils {
         'Host': 'api.ecsc.gov.sy:8080',
         'Referer': 'https://www.ecsc.gov.sy/',
         'Origin': 'https://www.ecsc.gov.sy',
-        'Sec-Ch-Ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"',
+        'Sec-Ch-Ua': '"Not/A)Brand";v="8", "Chromium";v="127", "Microsoft Edge";v="127"',
         'Sec-Ch-Ua-Mobile': '?0',
         'Sec-Ch-Ua-Platform': 'Windows',
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Site': 'same-site',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11.15; rv:129.0) Gecko/20110101 Firefox/128.0',
         'Source': 'WEB',
       });
     //As Edge

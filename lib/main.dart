@@ -47,8 +47,16 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const PasswordScreen(),
-      // home: SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
+      // home: const PasswordScreen(),
+      home: Overlay(
+        key: Keys.overlayKey,
+        initialEntries: [
+          OverlayEntry(
+            // builder: (context) => SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
+            builder: (context) => const PasswordScreen(),
+          ),
+        ],
+      ),
     );
   }
 }
