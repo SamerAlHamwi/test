@@ -125,7 +125,7 @@ class CaptchaUtils{
     final reserveUrl = 'https://api.ecsc.gov.sy:8080/rs/reserve?id=$id&captcha=$captcha';
     final Dio dio = DioClient.getDio();
 
-    for(int i = 0;i < 5;i++){
+    for(int i = 0;i < 3;i++){
       try {
         final response = await dio.get(reserveUrl, options: Utils.getOptions(AliasEnum.reserve,userIndex));
 
