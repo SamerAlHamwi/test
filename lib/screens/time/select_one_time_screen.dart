@@ -5,16 +5,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:king/screens/settings/settings.dart';
+import '../work/auto2_screen.dart';
 import '../work/auto_work.dart';
 
-class SelectAutoTimesScreen extends StatefulWidget {
-  const SelectAutoTimesScreen({super.key});
+class SelectOneTimeScreen extends StatefulWidget {
+  const SelectOneTimeScreen({super.key});
 
   @override
-  State<SelectAutoTimesScreen> createState() => _SelectAutoTimesScreenState();
+  State<SelectOneTimeScreen> createState() => _SelectOneTimeScreenState();
 }
 
-class _SelectAutoTimesScreenState extends State<SelectAutoTimesScreen> {
+class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
 
   int time = 0;
 
@@ -69,7 +70,7 @@ class _SelectAutoTimesScreenState extends State<SelectAutoTimesScreen> {
             ElevatedButton(
               onPressed: () async {
                 SettingsData.setTime(time);
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> const AutoWorkScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const AutoWorkScreen2()));
               },
               child: const Text('حفظ'),
             ),

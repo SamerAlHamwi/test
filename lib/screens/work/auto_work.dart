@@ -30,7 +30,9 @@ class AutoWorkScreen extends StatefulWidget {
 class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAliveClientMixin {
 
   bool _isLoading = false;
+  bool _isLoadingProcesses = false;
   List<String> messages = [];
+  List<int> minutes = [3,9,14,15,21,27,33,39,45,51,57];
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,11 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
             child: _isLoading ? const Text('جاري التثبيت') : const Text('أبدأ'),
           ),
           const SizedBox(height: 10,),
+          ElevatedButton(
+            onPressed: refreshProcesses,
+            child: _isLoadingProcesses ? const Text('جاري التحميل') : const Text('تحديث المعاملات'),
+          ),
+          const SizedBox(height: 10,),
           const StreamClockWidget(),
           const SizedBox(height: 10,),
           Container(
@@ -69,9 +76,28 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
             child: Center(
               child: ListView(
                 reverse: true,
-                children: List.generate(messages.length, (index) => Text(messages[index])),
+                children: List.generate(messages.length, (index) => Text(
+                    messages[index],
+                  style: TextStyle(
+                      fontSize: 12,
+                    color:
+                    messages[index].contains('تم') ?
+                    Colors.green :
+                    messages[index].contains('Get') ?
+                        Colors.blue :
+                    Colors.red,
+                  ),
+                  ),
+                ),
               ),
             ),
+          ),
+          const SizedBox(height: 10,),
+          ElevatedButton(
+            onPressed: () async {
+              getCaptchaForAllUsers();
+            },
+            child: _isLoadingProcesses ? const Text('اح تنين') : const Text('طلب معادلات'),
           ),
         ],
       ),
@@ -89,7 +115,40 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     );
   }
 
-  Timer? _captchaTimer; // Reference to store the Timer
+  getCaptchaForAllUsers() async {
+    if(SettingsData.getSession1.isNotEmpty){
+      getCaptcha(SettingsData.getProcesses1!.pRESULT!.first.pROCESSID!,0);
+    }
+    await Future.delayed(const Duration(milliseconds: 100));
+    if(SettingsData.getSession2.isNotEmpty){
+      getCaptcha(SettingsData.getProcesses2!.pRESULT!.first.pROCESSID!,1);
+    }
+    await Future.delayed(const Duration(milliseconds: 100));
+    if(SettingsData.getSession3.isNotEmpty){
+      getCaptcha(SettingsData.getProcesses3!.pRESULT!.first.pROCESSID!,2);
+    }
+  }
+
+  void refreshProcesses() async {
+    setState(() {
+      _isLoadingProcesses = true;
+    });
+    if(SettingsData.getSession1.isNotEmpty){
+      await Utils.getMyProcesses(0);
+    }
+    if(SettingsData.getSession2.isNotEmpty){
+      await Utils.getMyProcesses(1);
+    }
+    if(SettingsData.getSession3.isNotEmpty){
+      await Utils.getMyProcesses(2);
+    }
+
+    setState(() {
+      _isLoadingProcesses = false;
+    });
+  }
+
+  Timer? _captchaTimer;
 
   void runAutoCaptcha() {
     setState(() {
@@ -100,7 +159,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     List<int> intervals = SettingsData.getTimes();
 
     // Total time limit (5 minutes)
-    const durationLimit = Duration(minutes: 5);
+    const durationLimit = Duration(minutes: 150);
     DateTime startTime = DateTime.now(); // Start time
 
     _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
@@ -119,8 +178,9 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
 
       for (int i = 0; i < intervals.length; i++) {
         int currentInterval = intervals[i];
+        DateTime now = DateTime.now();
 
-        if (elapsedTime.inSeconds == currentInterval) {
+        if (now.second == currentInterval) {
           switch (i) {
             case 0:
               if (SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession1.isNotEmpty) {
@@ -206,7 +266,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
         return false;
       }
     } on DioException catch (e) {
-      String errorMessage = e.response?.data['Message'] ?? 'حدث خطأ اثناء طلب المعادلة في الصفحة 1';
+      String errorMessage = e.response?.data['Message'] ?? 'حدث خطأ اثناء طلب المعادلة';
 
       if(errorMessage.contains('تجاوزت') || errorMessage.contains('معالجة')){
         showTopSnackBar(

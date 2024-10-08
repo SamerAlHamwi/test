@@ -34,6 +34,8 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
   bool _isLoading = false;
   bool _isLoadingProcesses = false;
   List<String> messages = [];
+  List<int> minutes = [3,9,15,21,27,33,39,45,51,57];
+  // List<int> minutes = [2,8,14,20,26,32,38,44,50,56];
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +79,27 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
             child: Center(
               child: ListView(
                 reverse: true,
-                children: List.generate(messages.length, (index) => Text(messages[index])),
+                children: List.generate(messages.length, (index) => Text(
+                    messages[index],
+                  style: TextStyle(
+                    fontSize: 12,
+                    color:
+                    messages[index].contains('تم') ?
+                    Colors.green :
+                    messages[index].contains('Get') ?
+                    Colors.blue :
+                    Colors.red,
+                  ),
+                )),
               ),
             ),
+          ),
+          const SizedBox(height: 10,),
+          ElevatedButton(
+            onPressed: () async {
+              getCaptchaForAllUsers();
+            },
+            child: _isLoadingProcesses ? const Text('اح تنين') : const Text('طلب معادلات'),
           ),
         ],
       ),
@@ -97,18 +117,36 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     );
   }
 
+  getCaptchaForAllUsers() async {
+    if(SettingsData.getSession1.isNotEmpty){
+      getCaptcha(SettingsData.getProcesses1!.pRESULT!.first.pROCESSID!,0);
+    }
+    await Future.delayed(const Duration(milliseconds: 100));
+    if(SettingsData.getSession2.isNotEmpty){
+      getCaptcha(SettingsData.getProcesses2!.pRESULT!.first.pROCESSID!,1);
+    }
+    await Future.delayed(const Duration(milliseconds: 100));
+    if(SettingsData.getSession3.isNotEmpty){
+      getCaptcha(SettingsData.getProcesses3!.pRESULT!.first.pROCESSID!,2);
+    }
+  }
+
   Timer? _captchaTimer;
 
   void refreshProcesses() async {
     setState(() {
       _isLoadingProcesses = true;
     });
-    for(int i = 0;i < 3; i++){
-      bool isSuccess = await Utils.getMyProcesses(i);
-      if(!isSuccess){
-        break;
-      }
+    if(SettingsData.getSession1.isNotEmpty){
+      await Utils.getMyProcesses(0);
     }
+    if(SettingsData.getSession2.isNotEmpty){
+      await Utils.getMyProcesses(1);
+    }
+    if(SettingsData.getSession3.isNotEmpty){
+      await Utils.getMyProcesses(2);
+    }
+
     setState(() {
       _isLoadingProcesses = false;
     });
@@ -120,6 +158,9 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     });
 
     int time = SettingsData.getTime();
+    int first = time - 1;
+    int second = time - 5;
+
 
     const durationLimit = Duration(minutes: 120); // Run for 60 minutes
     DateTime startTime = DateTime.now();
@@ -137,18 +178,21 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
         return;
       }
 
+      DateTime now = DateTime.now();
+
       // Check if we are at the time second (same as the "time" variable)
       // and if 6 minutes (or a multiple) have passed
-      if (elapsedTime.inMinutes % 6 == 0 && elapsedTime.inSeconds % 60 == time) {
-        if (SettingsData.getProcesses1!.pRECORDCOUNT! > 0 && SettingsData.getSession1.isNotEmpty) {
+      if ((minutes.contains(now.minute) && now.second == first) || (minutes.contains(now.minute) && now.second == second)) {
+        print('Captcha request');
+        if (SettingsData.getSession1.isNotEmpty && SettingsData.getProcesses1!.pRECORDCOUNT! > 0) {
           getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
         }
         await Future.delayed(const Duration(milliseconds: 100));
-        if (SettingsData.getProcesses2!.pRECORDCOUNT! > 0 && SettingsData.getSession2.isNotEmpty) {
+        if (SettingsData.getSession2.isNotEmpty && SettingsData.getProcesses2!.pRECORDCOUNT! > 0) {
           getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
         }
         await Future.delayed(const Duration(milliseconds: 100));
-        if (SettingsData.getProcesses3!.pRECORDCOUNT! > 0 && SettingsData.getSession3.isNotEmpty) {
+        if (SettingsData.getSession3.isNotEmpty && SettingsData.getProcesses3!.pRECORDCOUNT! > 0) {
           getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
         }
       }
@@ -202,7 +246,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
         return false;
       }
     } on DioException catch (e) {
-      String errorMessage = e.response?.data['Message'] ?? 'حدث خطأ اثناء طلب المعادلة في الصفحة 1';
+      String errorMessage = e.response?.data['Message'] ?? 'حدث خطأ اثناء طلب المعادلة';
 
       if(errorMessage.contains('تجاوزت') || errorMessage.contains('معالجة')){
         showTopSnackBar(

@@ -36,7 +36,6 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
   void initState() {
     super.initState();
     suggestions = SettingsData.getSavedUsers();
-    print(suggestions);
   }
 
 

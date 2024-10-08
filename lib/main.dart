@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0), // Padding
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
-            ), // Shape
+            ),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const PasswordScreen(),
-      // home: SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
+      // home: const PasswordScreen(),
+      home: SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
     );
   }
 }

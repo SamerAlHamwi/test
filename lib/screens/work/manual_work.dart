@@ -27,6 +27,7 @@ class ManualScreen extends StatefulWidget {
 class _ManualScreenState extends State<ManualScreen> with AutomaticKeepAliveClientMixin {
 
   bool _isLoading = false;
+  bool _isLoadingProcesses = false;
   List<String> messages = [];
 
   @override
@@ -68,9 +69,25 @@ class _ManualScreenState extends State<ManualScreen> with AutomaticKeepAliveClie
             child: Center(
               child: ListView(
                 reverse: true,
-                children: List.generate(messages.length, (index) => Text(messages[index])),
+                children: List.generate(messages.length, (index) => Text(
+                    messages[index],
+                  style: TextStyle(
+                    fontSize: 12,
+                    color:
+                    messages[index].contains('تم') ?
+                    Colors.green :
+                    messages[index].contains('Get') ?
+                    Colors.blue :
+                    Colors.red,
+                  ),
+                )),
               ),
             ),
+          ),
+          const SizedBox(height: 10,),
+          ElevatedButton(
+            onPressed: refreshProcesses,
+            child: _isLoadingProcesses ? const Text('جاري التحميل') : const Text('تحديث المعاملات'),
           ),
         ],
       ),
@@ -86,6 +103,25 @@ class _ManualScreenState extends State<ManualScreen> with AutomaticKeepAliveClie
         ),
       ),
     );
+  }
+
+  void refreshProcesses() async {
+    setState(() {
+      _isLoadingProcesses = true;
+    });
+    if(SettingsData.getSession1.isNotEmpty){
+      await Utils.getMyProcesses(0);
+    }
+    if(SettingsData.getSession2.isNotEmpty){
+      await Utils.getMyProcesses(1);
+    }
+    if(SettingsData.getSession3.isNotEmpty){
+      await Utils.getMyProcesses(2);
+    }
+
+    setState(() {
+      _isLoadingProcesses = false;
+    });
   }
 
   getCaptchaForAllUsers() async {
