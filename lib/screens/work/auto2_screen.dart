@@ -128,7 +128,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     const durationLimit = Duration(minutes: 120);
     DateTime startTime = DateTime.now();
 
-    _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
+    _captchaTimer = Timer.periodic(const Duration(milliseconds: 150), (Timer timer) async {
       Duration elapsedTime = DateTime.now().difference(startTime);
 
       if (elapsedTime >= durationLimit) {

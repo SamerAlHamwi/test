@@ -119,12 +119,13 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
       _isLoading = true;
     });
 
-    List<int> intervals = SettingsData.getTimes();
+    List ss = SettingsData.getTimes();
+    List intervals = ss;
 
     const durationLimit = Duration(minutes: 150);
     DateTime startTime = DateTime.now();
 
-    _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    _captchaTimer = Timer.periodic(const Duration(milliseconds: 150), (Timer timer) {
       Duration elapsedTime = DateTime.now().difference(startTime);
 
       if (elapsedTime >= durationLimit) {
