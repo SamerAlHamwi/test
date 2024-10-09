@@ -2,6 +2,7 @@
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:king/screens/login_accounts/login_accounts.dart';
 import 'package:king/screens/password/password_screen.dart';
 import 'package:king/screens/settings/settings.dart';
@@ -15,7 +16,7 @@ void main() async {
   AudioPlayer.global.setAudioContext(AudioContextConfig(/*...*/).build());
   await SettingsData.init();
 
-  runApp(const MyApp());
+  runApp(Phoenix(child: const MyApp()));
 
 }
 

@@ -20,6 +20,19 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
   int time = 0;
   int time2 = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    initTime();
+  }
+
+  initTime(){
+    if(SettingsData.getTime() != 0){
+      time = SettingsData.getTime();
+      time2 = SettingsData.getTime2();
+    }
+  }
+
   void increment(int value) {
     setState(() {
       if (value < 60) {
@@ -40,7 +53,7 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('اختر وقت الحرق'),
+        title: const Text('اختر ثانيتين للحرق'),
         centerTitle: false,
       ),
       body: Padding(
@@ -54,7 +67,13 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.remove),
-                  onPressed: () => decrement(time),
+                  onPressed: (){
+                    setState(() {
+                      if (time > 0) {
+                        time--;
+                      }
+                    });
+                  },
                 ),
                 Text(
                   time.toString(),
@@ -62,7 +81,13 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
-                  onPressed: () => increment(time),
+                  onPressed: (){
+                    setState(() {
+                      if (time < 60) {
+                        time++;
+                      }
+                    });
+                  },
                 ),
               ],
             ),
@@ -72,7 +97,13 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.remove),
-                  onPressed: () => decrement(time2),
+                  onPressed: (){
+                    setState(() {
+                      if (time2 > 0) {
+                        time2--;
+                      }
+                    });
+                  },
                 ),
                 Text(
                   time2.toString(),
@@ -80,7 +111,13 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
-                  onPressed: () => increment(time2),
+                  onPressed: (){
+                    setState(() {
+                      if (time2 < 60) {
+                        time2++;
+                      }
+                    });
+                  },
                 ),
               ],
             ),

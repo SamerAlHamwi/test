@@ -1,12 +1,11 @@
 
 
 import 'package:flutter/material.dart';
-
 import '../login_accounts/login_accounts.dart';
 import '../settings/settings.dart';
+import '../time/select_countdown_time_screen.dart';
 import '../time/select_one_time_screen.dart';
 import '../time/select_time screen.dart';
-import '../work/auto2_screen.dart';
 import '../work/manual_work.dart';
 
 class SelectWorkType extends StatelessWidget {
@@ -43,6 +42,13 @@ class SelectWorkType extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context)=> const SelectOneTimeScreen()));
             },
             child: const Text('الحرق'),
+          ),
+          const SizedBox(height: 20,),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> const SelectCountDownTimeScreen()));
+            },
+            child: const Text('الحرق2'),
           ),
         ],
       ),

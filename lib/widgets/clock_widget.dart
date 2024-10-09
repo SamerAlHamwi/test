@@ -19,13 +19,13 @@ class _StreamClockWidgetState extends State<StreamClockWidget> {
 
   Stream<String> _createClockStream() async* {
     while (true) {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 100));
       yield _formatDateTime(DateTime.now().toUtc().add(const Duration(hours: 3)));
     }
   }
 
   static String _formatDateTime(DateTime dateTime) {
-    return DateFormat('HH:mm:ss').format(dateTime);
+    return DateFormat('HH:mm:ss.SSS').format(dateTime);
   }
 
   @override

@@ -1,6 +1,5 @@
 
 
-
 import 'package:flutter/material.dart';
 import 'package:king/screens/settings/settings.dart';
 import '../work/auto_work.dart';
@@ -14,7 +13,20 @@ class SelectAutoTimesScreen extends StatefulWidget {
 
 class _SelectAutoTimesScreenState extends State<SelectAutoTimesScreen> {
 
-  List<int> counters = List<int>.filled(6, 0);
+  List counters = List<int>.filled(6, 0);
+
+  @override
+  void initState() {
+    super.initState();
+    initTime();
+  }
+
+  initTime(){
+    if(SettingsData.getTimes().isNotEmpty){
+      List times = SettingsData.getTimes();
+      counters = times;
+    }
+  }
 
   void increment(int index) {
     setState(() {

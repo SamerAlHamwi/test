@@ -269,8 +269,6 @@ class Utils {
   //   }
   // }
 
-
-  ///
   // static deleteProcess(int id) async {
   //   const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
   //
@@ -314,11 +312,21 @@ class Utils {
   //   }
   // }
 
-
-
-
   static playAudio(AudioPlayer player,String audio) async {
     await player.play(AssetSource(audio));
+  }
+
+  static String? validateTime(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a time value';
+    }
+
+    int? enteredTime = int.tryParse(value);
+    if (enteredTime == null || enteredTime < 0 || enteredTime > 59) {
+      return 'Enter a valid time between 0 and 59';
+    }
+
+    return null;
   }
 
 

@@ -1,6 +1,5 @@
 
 
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -12,15 +11,15 @@ import '../../widgets/messages_widget.dart';
 import '../settings/settings.dart';
 
 
-class AutoWorkScreen2 extends StatefulWidget {
+class CountDownScreen extends StatefulWidget {
 
-  const AutoWorkScreen2({super.key});
+  const CountDownScreen({super.key});
 
   @override
-  State<AutoWorkScreen2> createState() => _AutoWorkScreen2State();
+  State<CountDownScreen> createState() => _CountDownScreenState();
 }
 
-class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAliveClientMixin {
+class _CountDownScreenState extends State<CountDownScreen> with AutomaticKeepAliveClientMixin {
 
   bool _isLoading = false;
   bool _isLoadingProcesses = false;
@@ -33,7 +32,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'الحرق',
+          '2الحرق',
           style: TextStyle(
               color: Colors.blue
           ),
@@ -121,9 +120,8 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
       _isLoading = true;
     });
 
-    int first = SettingsData.getTime();
-    int second = SettingsData.getTime2();
-
+    int time = SettingsData.getCountDownTime();
+    List times = generateTimeList(time);
 
     const durationLimit = Duration(minutes: 120);
     DateTime startTime = DateTime.now();
@@ -141,18 +139,32 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
 
       DateTime now = CaptchaUtils.getCurrentTime();
 
-      if ((minutes.contains(now.minute) && now.second == first) || (minutes.contains(now.minute) && now.second == second)) {
-        await Future.delayed(const Duration(milliseconds: 125));
-        if (SettingsData.getSession1.isNotEmpty) {
-          CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
+      if (minutes.contains(now.minute)) {
+        if(now.second == times[0]){
+          if (SettingsData.getSession1.isNotEmpty) {
+            CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
+          }
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (SettingsData.getSession2.isNotEmpty) {
+            CaptchaUtils.getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
+          }
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (SettingsData.getSession3.isNotEmpty) {
+            CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
+          }
         }
-        await Future.delayed(const Duration(milliseconds: 100));
-        if (SettingsData.getSession2.isNotEmpty) {
-          CaptchaUtils.getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
-        }
-        await Future.delayed(const Duration(milliseconds: 100));
-        if (SettingsData.getSession3.isNotEmpty) {
-          CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
+        if(now.second == times[1]){
+          if (SettingsData.getSession1.isNotEmpty) {
+            CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT![1].pROCESSID!, 0);
+          }
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (SettingsData.getSession2.isNotEmpty) {
+            CaptchaUtils.getCaptcha(SettingsData.getProcesses2!.pRESULT![1].pROCESSID!, 1);
+          }
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (SettingsData.getSession3.isNotEmpty) {
+            CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT![1].pROCESSID!, 2);
+          }
         }
       }
     });
@@ -169,6 +181,31 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     }
   }
 
+  List<int> generateTimeList(int second) {
+    List<int> timeList = [];
+    int time1 = (second - 7) % 60;
+    if (time1 < 0) {
+      time1 += 60;
+    }
+
+    int time2 = (second - 2) % 60;
+    if (time2 < 0) {
+      time2 += 60;
+    }
+
+    timeList.add(time1);
+    timeList.add(time2);
+
+    // for (int i = 2; i <= 7; i++) {
+    //   int time = (second - i) % 60;
+    //   if (time < 0) {
+    //     time += 60;
+    //   }
+    //   timeList.add(time);
+    // }
+
+    return timeList;
+  }
 
   @override
   bool get wantKeepAlive => true;

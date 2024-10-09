@@ -22,6 +22,7 @@ class SettingsData {
   static String timesKey = 'times';
   static String timeKey = 'time';
   static String time2Key = 'time2';
+  static String countDownTimeKey = 'countDownTime';
   static String usersKey = 'users';
 
   static String alias = '';
@@ -30,12 +31,20 @@ class SettingsData {
     await GetStorage.init(storageName);
   }
 
+  static setCountDownTime(int time){
+    box.write(countDownTimeKey, time);
+  }
+
+  static getCountDownTime(){
+    return box.read(countDownTimeKey) ?? 0;
+  }
+
   static setTime(int time){
     box.write(timeKey, time);
   }
 
   static getTime(){
-    return box.read(timeKey) ?? 5;
+    return box.read(timeKey) ?? 0;
   }
 
   static setTime2(int time2){
@@ -43,10 +52,10 @@ class SettingsData {
   }
 
   static getTime2(){
-    return box.read(time2Key) ?? 5;
+    return box.read(time2Key) ?? 0;
   }
 
-  static setTimes(List<int> times){
+  static setTimes(List times){
     box.write(timesKey, times);
   }
 
