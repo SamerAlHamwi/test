@@ -214,14 +214,15 @@ class Utils {
         return -1;
       }
     } on DioException catch (e) {
-      String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
+      // String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
+      print(e);
 
-      showTopSnackBar(
-        Overlay.of(Keys.overlayProcessKey.currentState!.context),
-        CustomSnackBar.error(
-          message: errorMessage,
-        ),
-      );
+      // showTopSnackBar(
+      //   Overlay.of(Keys.overlayProcessKey.currentState!.context),
+      //   CustomSnackBar.error(
+      //     message: errorMessage,
+      //   ),
+      // );
 
       return -1;
     } catch (e) {

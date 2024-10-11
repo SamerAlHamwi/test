@@ -1,5 +1,4 @@
 
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -49,8 +48,10 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
           ),
           const SizedBox(height: 10,),
           ElevatedButton(
-            onPressed: refreshProcesses,
-            child: _isLoadingProcesses ? const Text('جاري التحميل') : const Text('تحديث المعاملات'),
+            onPressed: () async {
+              getCaptchaForAllUsers();
+            },
+            child: const Text('طلب معادلات'),
           ),
           const SizedBox(height: 10,),
           const StreamClockWidget(),
@@ -58,10 +59,10 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
           const MessageStreamWidget(),
           const SizedBox(height: 10,),
           ElevatedButton(
-            onPressed: () async {
-              getCaptchaForAllUsers();
+            onPressed: (){
+              refreshProcesses();
             },
-            child: _isLoadingProcesses ? const Text('اح تنين') : const Text('طلب معادلات'),
+            child: _isLoadingProcesses ? const Text('جاري التحميل') : const Text('تحديث المعاملات'),
           ),
         ],
       ),
@@ -80,6 +81,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
   }
 
   getCaptchaForAllUsers() async {
+    print('getCaptchaForAllUsers');
     if(SettingsData.getSession1.isNotEmpty){
       CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT!.first.pROCESSID!,0);
     }
@@ -119,22 +121,11 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
       _isLoading = true;
     });
 
-    List ss = SettingsData.getTimes();
-    List intervals = ss;
+    List times = SettingsData.getTimes();
+    List intervals = times;
 
-    const durationLimit = Duration(minutes: 150);
-    DateTime startTime = DateTime.now();
 
     _captchaTimer = Timer.periodic(const Duration(milliseconds: 150), (Timer timer) {
-      Duration elapsedTime = DateTime.now().difference(startTime);
-
-      if (elapsedTime >= durationLimit) {
-        timer.cancel();
-        setState(() {
-          _isLoading = false;
-        });
-        return;
-      }
 
       for (int i = 0; i < intervals.length; i++) {
         int currentInterval = intervals[i];
