@@ -54,7 +54,7 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ...List.generate(3, (index) {
+              ...List.generate(4, (index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 16),
                   child: Column(
