@@ -103,6 +103,10 @@ class _ManualScreenState extends State<ManualScreen> with AutomaticKeepAliveClie
     if(SettingsData.getSession3.isNotEmpty){
       CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT!.first.pROCESSID!,2);
     }
+    await Future.delayed(const Duration(milliseconds: 150));
+    if(SettingsData.getSession4.isNotEmpty){
+      CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT!.first.pROCESSID!,3);
+    }
   }
 
   @override

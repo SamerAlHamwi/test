@@ -16,8 +16,6 @@ import 'messages_utils.dart';
 
 class CaptchaUtils{
 
-
-
   static String getDamascusTime() {
     DateTime dateTime = DateTime.now().toUtc().add(const Duration(hours: 3));
     String time = '${dateTime.minute}:${dateTime.second} ${dateTime.millisecond}';
@@ -58,13 +56,7 @@ class CaptchaUtils{
       String errorMessage = e.response?.data['Message'] ?? 'حدث خطأ اثناء طلب المعادلة';
 
       if(errorMessage.contains('تجاوزت') || errorMessage.contains('معالجة')){
-        showTopSnackBar(
-          Overlay.of(Keys.overlayKey.currentState!.context),
-          CustomSnackBar.info(
-            message: errorMessage,
-          ),
-        );
-        Utils.playAudio(AudioPlayer(),alertSound);
+        MessagesUtils.addNewMessage('تجاوزت/نشاط');
       }else{
         if(!errorMessage.contains('حدث خطأ اثناء طلب المعادلة')){
           MessagesUtils.addNewMessage(MessagesUtils.getNoCaptchaMessage(userIndex));
@@ -74,12 +66,7 @@ class CaptchaUtils{
       }
       return false;
     } catch (e) {
-      showTopSnackBar(
-        Overlay.of(Keys.overlayKey.currentContext!),
-        const CustomSnackBar.error(
-          message: 'An unexpected error occurred. Please try again.',
-        ),
-      );
+      MessagesUtils.addNewMessage(e.toString());
       return false;
     } finally {
 
@@ -95,34 +82,20 @@ class CaptchaUtils{
         final response = await dio.get(reserveUrl, options: Utils.getOptions(AliasEnum.reserve,userIndex));
 
         if (response.statusCode == 200) {
-          showTopSnackBar(
-            Overlay.of(Keys.overlayKey.currentContext!),
-            const CustomSnackBar.success(
-              message: "تم تثبيت المعاملة بنجاح",
-            ),
-          );
           MessagesUtils.addNewMessage(MessagesUtils.getPassportReservedMessage(userIndex));
           break;
         }
       } on DioException catch (e) {
         String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
 
-        showTopSnackBar(
-          Overlay.of(Keys.overlayKey.currentContext!),
-          CustomSnackBar.error(
-            message: errorMessage,
-          ),
-        );
+        MessagesUtils.addNewMessage(errorMessage);
+
         if(errorMessage.contains('نأسف') || errorMessage.contains('النتيجة')){
           break;
         }
       } catch (e) {
-        showTopSnackBar(
-          Overlay.of(Keys.overlayKey.currentContext!),
-          const CustomSnackBar.error(
-            message: 'An unexpected error occurred. Please try again.',
-          ),
-        );
+        print(e);
+        MessagesUtils.addNewMessage(e.toString());
       }
       await Future.delayed(const Duration(milliseconds: 200));
     }

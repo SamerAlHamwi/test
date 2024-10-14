@@ -27,8 +27,8 @@ class LoginPhonePasswordScreen extends StatefulWidget {
 class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
 
   // Controllers for the text fields
-  final List<TextEditingController> phoneControllers = List.generate(3, (index) => TextEditingController());
-  final List<TextEditingController> passwordControllers = List.generate(3, (index) => TextEditingController());
+  final List<TextEditingController> phoneControllers = List.generate(4, (index) => TextEditingController());
+  final List<TextEditingController> passwordControllers = List.generate(4, (index) => TextEditingController());
   bool _isLoading = false;
   List<UserModel> suggestions = [];
 
@@ -164,11 +164,13 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
         return 'المعاملة الثانية';
       case 2:
         return 'المعاملة الثالثة';
+      case 3:
+        return 'المعاملة الرابعة';
     }
   }
 
   loginToThreeAccounts() async {
-    for(int index = 0; index < 3 ; index++){
+    for(int index = 0; index < 4 ; index++){
       if(phoneControllers[index].text.isNotEmpty && passwordControllers[index].text.isNotEmpty){
         bool isSuccess = await login(userName: phoneControllers[index].text.trim(),password: passwordControllers[index].text.trim(),index: index);
         if(!isSuccess){
@@ -178,107 +180,6 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
     }
     return true;
   }
-
-  // Future<bool> login({
-  //   required String userName,
-  //   required String password,
-  //   required int index,
-  // }) async {
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
-  //
-  //   const String loginUrl = 'https://api.ecsc.gov.sy:8080/secure/auth/login';
-  //
-  //   HttpClient client = HttpClient()
-  //     ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-  //
-  //   try {
-  //     // Make the HTTP POST request
-  //     final response = await http.post(
-  //       Uri.parse(loginUrl),
-  //       headers: Utils.getOptions2(AliasEnum.none, index), // Add your custom headers here
-  //       body: jsonEncode({
-  //         'username': userName,
-  //         'password': password,
-  //       }),
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final Map<String, dynamic> data = jsonDecode(response.body);
-  //
-  //       // Extract session from 'set-cookie' header
-  //       String? session = response.headers['set-cookie'];
-  //       if (session != null) {
-  //         RegExp regExp = RegExp(r'SESSION=([^;]+)');
-  //         Match? match = regExp.firstMatch(session);
-  //         if (match != null) {
-  //           String sessionValue = match.group(1)!;
-  //           LoginModel model = LoginModel.fromJson(data);
-  //           SettingsData.addSavedUser(
-  //               UserModel(phoneNumber: userName, password: password));
-  //
-  //           // Store session and user info
-  //           switch (index) {
-  //             case 0:
-  //               SettingsData.setSession1(sessionValue);
-  //               SettingsData.setUser1(data);
-  //               break;
-  //             case 1:
-  //               SettingsData.setSession2(sessionValue);
-  //               SettingsData.setUser2(data);
-  //               break;
-  //             case 2:
-  //               SettingsData.setSession3(sessionValue);
-  //               SettingsData.setUser3(data);
-  //               break;
-  //           }
-  //
-  //           showTopSnackBar(
-  //             Overlay.of(context),
-  //             CustomSnackBar.success(
-  //               message:
-  //               'مرحباً ${model.pPROFILERESULT!.fULLNAME} تم تسجيل الدخول بنجاح، جاري تحضير المعاملات',
-  //             ),
-  //           );
-  //         }
-  //
-  //         // Refresh the state and get processes
-  //         setState(() {});
-  //         bool isSuccess = await Utils.getMyProcesses(index);
-  //         return isSuccess;
-  //       } else {
-  //         throw Exception('Session cookie not found');
-  //       }
-  //     } else {
-  //       final responseBody = jsonDecode(response.body);
-  //       final message = responseBody['Message'];
-  //
-  //       showTopSnackBar(
-  //         Overlay.of(context),
-  //         CustomSnackBar.error(message: message),
-  //       );
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //     String errorMessage = e is http.ClientException
-  //         ? 'An unexpected network error occurred.'
-  //         : 'An unexpected error occurred.';
-  //
-  //     showTopSnackBar(
-  //       Overlay.of(context),
-  //       CustomSnackBar.error(
-  //         message: errorMessage,
-  //       ),
-  //     );
-  //     return false;
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
 
 
 Future<bool> login({required String userName,required String password,required int index}) async {
@@ -321,6 +222,10 @@ Future<bool> login({required String userName,required String password,required i
             case 2:
               SettingsData.setSession3(sessionValue);
               SettingsData.setUser3(data);
+              break;
+            case 3:
+              SettingsData.setSession4(sessionValue);
+              SettingsData.setUser4(data);
               break;
           }
           showTopSnackBar(

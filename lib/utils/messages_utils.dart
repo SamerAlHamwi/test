@@ -26,6 +26,8 @@ class MessagesUtils{
         return '${SettingsData.getUser2!.pPROFILERESULT!.fULLNAME ?? ''} $requestCaptcha ${CaptchaUtils.getDamascusTime()}';
       case 2:
         return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} $requestCaptcha ${CaptchaUtils.getDamascusTime()}';
+      case 3:
+        return '${SettingsData.getUser4!.pPROFILERESULT!.fULLNAME ?? ''} $requestCaptcha ${CaptchaUtils.getDamascusTime()}';
     }
   }
 
@@ -37,6 +39,8 @@ class MessagesUtils{
         return '${SettingsData.getUser2!.pPROFILERESULT!.fULLNAME ?? ''} $getCaptchaString ${CaptchaUtils.getDamascusTime()}';
       case 2:
         return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} $getCaptchaString ${CaptchaUtils.getDamascusTime()}';
+      case 3:
+        return '${SettingsData.getUser4!.pPROFILERESULT!.fULLNAME ?? ''} $getCaptchaString ${CaptchaUtils.getDamascusTime()}';
     }
   }
 
@@ -48,6 +52,8 @@ class MessagesUtils{
         return '${SettingsData.getUser2!.pPROFILERESULT!.fULLNAME ?? ''} $noCaptcha';
       case 2:
         return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} $noCaptcha';
+      case 3:
+        return '${SettingsData.getUser4!.pPROFILERESULT!.fULLNAME ?? ''} $noCaptcha';
     }
   }
 
@@ -58,6 +64,8 @@ class MessagesUtils{
       case 1:
         return '${SettingsData.getUser2!.pPROFILERESULT!.fULLNAME ?? ''} $errorCaptcha';
       case 2:
+        return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} $errorCaptcha';
+      case 3:
         return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} $errorCaptcha';
     }
   }
@@ -71,6 +79,8 @@ class MessagesUtils{
         return '${SettingsData.getUser2!.pPROFILERESULT!.fULLNAME ?? ''} $doneCaptcha ${CaptchaUtils.getDamascusTime()}';
       case 2:
         return '${SettingsData.getUser3!.pPROFILERESULT!.fULLNAME ?? ''} $doneCaptcha ${CaptchaUtils.getDamascusTime()}';
+      case 3:
+        return '${SettingsData.getUser4!.pPROFILERESULT!.fULLNAME ?? ''} $doneCaptcha ${CaptchaUtils.getDamascusTime()}';
     }
   }
 

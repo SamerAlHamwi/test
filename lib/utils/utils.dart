@@ -15,22 +15,13 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../models/process_model.dart';
+import 'messages_utils.dart';
 
 class Utils {
 
   static getHeaders(AliasEnum type,int userIndex){
     String session = '';
-    switch (userIndex){
-      case 0:
-        session = SettingsData.getSession1;
-        break;
-      case 1:
-        session = SettingsData.getSession2;
-        break;
-      case 2:
-        session = SettingsData.getSession3;
-        break;
-    }
+
 
     String alias;
     switch(type){
@@ -66,11 +57,9 @@ class Utils {
         'Origin': 'https://www.ecsc.gov.sy',
         'Sec-Ch-Ua': '"Not/A)Brand";v="8", "Chromium";v="127", "Microsoft Edge";v="127"',
         'Sec-Ch-Ua-Mobile': '?0',
-        'Sec-Ch-Ua-Platform': 'Windows',
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Site': 'same-site',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11.15; rv:129.0) Gecko/20110101 Firefox/128.0',
         'Source': 'WEB',
       });
     //As Edge
@@ -82,6 +71,37 @@ class Utils {
     //     'Authorization': session,
     //   });
     // }
+
+    switch (userIndex){
+      case 0:
+        session = SettingsData.getSession1;
+        headers.addAll({
+          'Sec-Ch-Ua-Platform': 'macOS',
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11.15; rv:129.0) Gecko/20110101 Firefox/128.0',
+        });
+        break;
+      case 1:
+        session = SettingsData.getSession2;
+        headers.addAll({
+          'Sec-Ch-Ua-Platform': 'Windows',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/531.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/531.36 Edg/129.0.0.0',
+        });
+        break;
+      case 2:
+        session = SettingsData.getSession3;
+        headers.addAll({
+          'Sec-Ch-Ua-Platform': 'Windows',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/533.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/533.36 Edg/128.0.0.0',
+        });
+        break;
+      case 3:
+        session = SettingsData.getSession4;
+        headers.addAll({
+          'Sec-Ch-Ua-Platform': 'Windows',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/532.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/532.36 Edg/127.0.0.0',
+        });
+        break;
+    }
 
     if(alias.isNotEmpty){
       headers.addAll({
@@ -168,6 +188,9 @@ class Utils {
           case 2:
             SettingsData.setProcesses3(data);
             break;
+          case 3:
+            SettingsData.setProcesses4(data);
+            break;
         }
 
         return true;
@@ -176,13 +199,7 @@ class Utils {
       }
     } on DioException catch (e) {
       String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
-
-      showTopSnackBar(
-        Overlay.of(Keys.overlayKey.currentState!.context),
-        CustomSnackBar.error(
-          message: errorMessage,
-        ),
-      );
+      MessagesUtils.addNewMessage(errorMessage);
       return false;
     } catch (e) {
       return false;
@@ -217,12 +234,6 @@ class Utils {
       // String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
       print(e);
 
-      // showTopSnackBar(
-      //   Overlay.of(Keys.overlayProcessKey.currentState!.context),
-      //   CustomSnackBar.error(
-      //     message: errorMessage,
-      //   ),
-      // );
 
       return -1;
     } catch (e) {
@@ -230,88 +241,6 @@ class Utils {
     }
   }
 
-  // static addProcess(Map model) async {
-  //   const addTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
-  //
-  //   final Dio dio = DioClient.getDio();
-  //
-  //   try {
-  //     final response = await dio.post(
-  //       addTransactionsUrl,
-  //       options: Utils.getOptions(AliasEnum.add),
-  //       data: model,
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final Map<String, dynamic> data = response.data;
-  //       showTopSnackBar(
-  //         Overlay.of(Keys.overlayKey.currentState!.context),
-  //         CustomSnackBar.success(
-  //           message: 'تمت إضافة المعاملة بنجاح',
-  //         ),
-  //       );
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } on DioException catch (e) {
-  //     String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
-  //
-  //     showTopSnackBar(
-  //       Overlay.of(Keys.overlayProcessKey.currentState!.context),
-  //       CustomSnackBar.error(
-  //         message: errorMessage,
-  //       ),
-  //     );
-  //
-  //     return false;
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
-
-  // static deleteProcess(int id) async {
-  //   const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
-  //
-  //   final Dio dio = DioClient.getDio();
-  //
-  //   try {
-  //     final response = await dio.post(
-  //         getTransactionsUrl,
-  //         options: Utils.getOptions(AliasEnum.delete),
-  //         data: {
-  //           "ALIAS": "OPMEShwoqV",
-  //           "P_USERNAME": "WebSite",
-  //           "P_ID": id
-  //         }
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final Map<String, dynamic> data = response.data;
-  //       showTopSnackBar(
-  //         Overlay.of(Keys.overlayKey.currentState!.context),
-  //         CustomSnackBar.success(
-  //           message: 'تم حذف المعاملة بنجاح',
-  //         ),
-  //       );
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } on DioException catch (e) {
-  //     String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
-  //
-  //     showTopSnackBar(
-  //       Overlay.of(Keys.overlayKey.currentState!.context),
-  //       CustomSnackBar.error(
-  //         message: errorMessage,
-  //       ),
-  //     );
-  //     return false;
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
 
   static playAudio(AudioPlayer player,String audio) async {
     await player.play(AssetSource(audio));
@@ -332,22 +261,3 @@ class Utils {
 
 
 }
-
-// headers.addAll({
-//         'Accept': 'application/json, text/plain, */*',
-//     'Accept-Encoding': 'gzip, deflate, br, zstd',
-//     'Accept-Language': 'en-US,en;q=0.5',
-//     'Connection': 'keep-alive',
-//     'Cache-Control': 'max-age=0',
-//     'Host': 'api.ecsc.gov.sy:8080',
-//     'Referer': 'https://www.ecsc.gov.sy/',
-//     'Origin': 'https://www.ecsc.gov.sy',
-//     'Sec-Ch-Ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"',
-//     'Sec-Ch-Ua-Mobile': '?0',
-//     'Sec-Ch-Ua-Platform': 'Windows',
-//     'Sec-Fetch-Dest': 'empty',
-//     'Sec-Fetch-Mode': 'cors',
-//     'Sec-Fetch-Site': 'same-site',
-//     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0',
-//     'Source': 'WEB',
-//   });

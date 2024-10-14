@@ -12,12 +12,15 @@ class SettingsData {
   static String tokenKey1 = 'session1';
   static String tokenKey2 = 'session2';
   static String tokenKey3 = 'session3';
+  static String tokenKey4 = 'session4';
   static String processKey1 = 'process1';
   static String processKey2 = 'process2';
   static String processKey3 = 'process3';
+  static String processKey4 = 'process4';
   static String userKey1 = 'user1';
   static String userKey2 = 'user2';
   static String userKey3 = 'user3';
+  static String userKey4 = 'user4';
   static String typeKey = 'type';
   static String timesKey = 'times';
   static String timeKey = 'time';
@@ -75,6 +78,10 @@ class SettingsData {
     box.write(processKey3, model);
   }
 
+  static setProcesses4(Map model){
+    box.write(processKey3, model);
+  }
+
   static setUser1(Map model){
     box.write(userKey1, model);
   }
@@ -87,6 +94,10 @@ class SettingsData {
     box.write(userKey3, model);
   }
 
+  static setUser4(Map model){
+    box.write(userKey4, model);
+  }
+
   static setSession1(String userSession){
     box.write(tokenKey1, userSession);
   }
@@ -97,6 +108,10 @@ class SettingsData {
 
   static setSession3(String userSession){
     box.write(tokenKey3, userSession);
+  }
+
+  static setSession4(String userSession){
+    box.write(tokenKey4, userSession);
   }
 
   static setType(bool isMobile){
@@ -145,6 +160,7 @@ class SettingsData {
   static String get getSession1 => box.read(tokenKey1) ?? '';
   static String get getSession2 => box.read(tokenKey2) ?? '';
   static String get getSession3 => box.read(tokenKey3) ?? '';
+  static String get getSession4 => box.read(tokenKey4) ?? '';
   static String get getAlias => '';
   static bool get getType => box.read(typeKey) ?? false;
 
@@ -156,6 +172,9 @@ class SettingsData {
 
   static String get getUser3Id1 => getProcesses3!.pRESULT!.isNotEmpty ? getProcesses3!.pRESULT![0].pROCESSID.toString() : "";
   static String get getUser3Id2 => getProcesses3!.pRESULT!.length > 1 ? getProcesses3!.pRESULT![1].pROCESSID.toString() : "";
+
+  static String get getUser4Id1 => getProcesses4!.pRESULT!.isNotEmpty ? getProcesses4!.pRESULT![0].pROCESSID.toString() : "";
+  static String get getUser4Id2 => getProcesses4!.pRESULT!.length > 1 ? getProcesses4!.pRESULT![1].pROCESSID.toString() : "";
 
   static ProcessModel? get getProcesses1 {
     return ProcessModel.fromJson(box.read(processKey1));
@@ -169,6 +188,10 @@ class SettingsData {
     return ProcessModel.fromJson(box.read(processKey3));
   }
 
+  static ProcessModel? get getProcesses4 {
+    return ProcessModel.fromJson(box.read(processKey4));
+  }
+
   static LoginModel? get getUser1 {
     return LoginModel.fromJson(box.read(userKey1));
   }
@@ -179,6 +202,10 @@ class SettingsData {
 
   static LoginModel? get getUser3 {
     return LoginModel.fromJson(box.read(userKey3));
+  }
+
+  static LoginModel? get getUser4 {
+    return LoginModel.fromJson(box.read(userKey4));
   }
 
 

@@ -93,6 +93,10 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     if(SettingsData.getSession3.isNotEmpty){
       CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT!.first.pROCESSID!,2);
     }
+    await Future.delayed(const Duration(milliseconds: 100));
+    if(SettingsData.getSession4.isNotEmpty){
+      CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT!.first.pROCESSID!,3);
+    }
   }
 
   void refreshProcesses() async {
@@ -107,6 +111,9 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     }
     if(SettingsData.getSession3.isNotEmpty){
       await Utils.getMyProcesses(2);
+    }
+    if(SettingsData.getSession4.isNotEmpty){
+      await Utils.getMyProcesses(3);
     }
 
     setState(() {
@@ -125,7 +132,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
     List intervals = times;
 
 
-    _captchaTimer = Timer.periodic(const Duration(milliseconds: 150), (Timer timer) {
+    _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
 
       for (int i = 0; i < intervals.length; i++) {
         int currentInterval = intervals[i];
@@ -161,6 +168,16 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
             case 5:
               if (SettingsData.getSession3.isNotEmpty) {
                 CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT![1].pROCESSID!, 2);
+              }
+              break;
+            case 6:
+              if (SettingsData.getSession4.isNotEmpty) {
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT![1].pROCESSID!, 3);
+              }
+              break;
+            case 7:
+              if (SettingsData.getSession4.isNotEmpty) {
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT![1].pROCESSID!, 3);
               }
               break;
           }

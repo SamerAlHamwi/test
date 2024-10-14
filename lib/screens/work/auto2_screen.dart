@@ -94,6 +94,10 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     if(SettingsData.getSession3.isNotEmpty){
       CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT!.first.pROCESSID!,2);
     }
+    await Future.delayed(const Duration(milliseconds: 100));
+    if(SettingsData.getSession4.isNotEmpty){
+      CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT!.first.pROCESSID!,3);
+    }
   }
 
   Timer? _captchaTimer;
@@ -110,6 +114,9 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     }
     if(SettingsData.getSession3.isNotEmpty){
       await Utils.getMyProcesses(2);
+    }
+    if(SettingsData.getSession4.isNotEmpty){
+      await Utils.getMyProcesses(3);
     }
     setState(() {
       _isLoadingProcesses = false;
@@ -128,7 +135,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     const durationLimit = Duration(minutes: 120);
     DateTime startTime = DateTime.now();
 
-    _captchaTimer = Timer.periodic(const Duration(milliseconds: 150), (Timer timer) async {
+    _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       Duration elapsedTime = DateTime.now().difference(startTime);
 
       if (elapsedTime >= durationLimit) {
@@ -153,6 +160,10 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
         await Future.delayed(const Duration(milliseconds: 100));
         if (SettingsData.getSession3.isNotEmpty) {
           CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
+        }
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (SettingsData.getSession4.isNotEmpty) {
+          CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT![0].pROCESSID!, 3);
         }
       }
     });

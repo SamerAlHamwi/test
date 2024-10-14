@@ -70,7 +70,7 @@ class _SelectCountDownTimeScreenState extends State<SelectCountDownTimeScreen> {
                     onPressed: () => decrement(),
                   ),
                   SizedBox(
-                    width: 60, // Set the width of the text field
+                    width: 60,
                     child: TextFormField(
                       controller: controller,
                       keyboardType: TextInputType.number,
