@@ -80,12 +80,12 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
                   if(success){
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const SelectWorkType()));
                   }else{
-                    showTopSnackBar(
-                      Overlay.of(context),
-                      const CustomSnackBar.error(
-                        message: 'فشلت عملية تسجيل الدخول',
-                      ),
-                    );
+                    // showTopSnackBar(
+                    //   Overlay.of(context),
+                    //   const CustomSnackBar.error(
+                    //     message: 'فشلت عملية تسجيل الدخول',
+                    //   ),
+                    // );
                   }
                 },
                 child: _isLoading ? const Text('يتم التحميل...') : const Text('تسجيل الدخول'),
@@ -170,6 +170,7 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
   }
 
   loginToThreeAccounts() async {
+    SettingsData.logout();
     for(int index = 0; index < 4 ; index++){
       if(phoneControllers[index].text.isNotEmpty && passwordControllers[index].text.isNotEmpty){
         bool isSuccess = await login(userName: phoneControllers[index].text.trim(),password: passwordControllers[index].text.trim(),index: index);
@@ -242,7 +243,7 @@ Future<bool> login({required String userName,required String password,required i
         return isSuccess;
       } else {
         final responseBody = json.decode(response.data);
-        final message = responseBody['Message'];
+        final message = '${responseBody['Message']} index';
         showTopSnackBar(
           Overlay.of(context),
           CustomSnackBar.error(

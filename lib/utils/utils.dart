@@ -159,7 +159,7 @@ class Utils {
   }
 
 
-  static getMyProcesses(int userIndex) async {
+  static getMyProcesses(int userIndex,{bool isWithRefresh = true}) async {
     const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
 
     final Dio dio = DioClient.getDio();
@@ -178,19 +178,21 @@ class Utils {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.data;
-        switch(userIndex){
-          case 0:
-            SettingsData.setProcesses1(data);
-            break;
-          case 1:
-            SettingsData.setProcesses2(data);
-            break;
-          case 2:
-            SettingsData.setProcesses3(data);
-            break;
-          case 3:
-            SettingsData.setProcesses4(data);
-            break;
+        if(isWithRefresh){
+          switch(userIndex){
+            case 0:
+              SettingsData.setProcesses1(data);
+              break;
+            case 1:
+              SettingsData.setProcesses2(data);
+              break;
+            case 2:
+              SettingsData.setProcesses3(data);
+              break;
+            case 3:
+              SettingsData.setProcesses4(data);
+              break;
+          }
         }
 
         return true;

@@ -13,7 +13,7 @@ class SelectAutoTimesScreen extends StatefulWidget {
 
 class _SelectAutoTimesScreenState extends State<SelectAutoTimesScreen> {
 
-  List counters = List<int>.filled(8, 0);
+  List counters = List<int>.filled(10, 0);
 
   @override
   void initState() {
@@ -133,7 +133,7 @@ class _SelectAutoTimesScreenState extends State<SelectAutoTimesScreen> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.remove),
-                    onPressed: () => decrement(index+4),
+                    onPressed: () => decrement(index+6),
                   ),
                   Text(
                     counters[index+6].toString(),
@@ -141,7 +141,7 @@ class _SelectAutoTimesScreenState extends State<SelectAutoTimesScreen> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
-                    onPressed: () => increment(index+4),
+                    onPressed: () => increment(index+6),
                   ),
                 ],
               );

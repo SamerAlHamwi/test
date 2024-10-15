@@ -79,7 +79,7 @@ class SettingsData {
   }
 
   static setProcesses4(Map model){
-    box.write(processKey3, model);
+    box.write(processKey4, model);
   }
 
   static setUser1(Map model){
@@ -145,14 +145,17 @@ class SettingsData {
     await box.remove(tokenKey1);
     await box.remove(tokenKey2);
     await box.remove(tokenKey3);
+    await box.remove(tokenKey4);
 
     await box.remove(userKey1);
     await box.remove(userKey2);
     await box.remove(userKey3);
+    await box.remove(userKey4);
 
     await box.remove(processKey1);
     await box.remove(processKey2);
     await box.remove(processKey3);
+    await box.remove(processKey4);
   }
 
 
@@ -211,76 +214,4 @@ class SettingsData {
 
 }
 
-// ///Sessions
-// String session1 = '';
-// String session2 = '';
-// String session3 = '';
-//
-// ///User1 Processes id
-// int? user1Id1;
-//
-// ///User2 Processes id
-// int? user2Id1;
-//
-// ///User3 Processes id
-// int? user3Id1;
-//
-//
-// ///Processes
-// ProcessModel? getProcesses1;
-// ProcessModel? getProcesses2;
-// ProcessModel? getProcesses3;
-//
-// ///Users
-// LoginModel? user1;
-// LoginModel? user2;
-// LoginModel? user3;
-//
-//
-// initData() async {
-//   await initSession();
-//   await initProcesses();
-//   await initUsers();
-// }
-//
-// initSession(){
-//   if(SettingsData.getSession1.isNotEmpty){
-//     session1 = SettingsData.getSession1;
-//   }
-//
-//   if(SettingsData.getSession2.isNotEmpty){
-//     session2 = SettingsData.getSession2;
-//   }
-//
-//   if(SettingsData.getSession3.isNotEmpty){
-//     session3 = SettingsData.getSession3;
-//   }
-// }
-//
-// initProcesses(){
-//   if(session1.isNotEmpty){
-//     getProcesses1 = SettingsData.getProcesses1;
-//     user1Id1 = getProcesses1!.pRESULT!.isNotEmpty ? getProcesses1!.pRESULT![0].pROCESSID : 0;
-//   }
-//   if(session2.isNotEmpty){
-//     getProcesses2 = SettingsData.getProcesses2;
-//     user2Id1 = getProcesses2!.pRESULT!.isNotEmpty ? getProcesses2!.pRESULT![0].pROCESSID : 0;
-//   }
-//   if(session3.isNotEmpty){
-//     getProcesses3 = SettingsData.getProcesses3;
-//     user3Id1 = getProcesses3!.pRESULT!.isNotEmpty ? getProcesses3!.pRESULT![0].pROCESSID : 0;
-//   }
-// }
-//
-// initUsers(){
-//   if(session1.isNotEmpty){
-//     user1 = SettingsData.getUser1;
-//   }
-//   if(session2.isNotEmpty){
-//     user2 = SettingsData.getUser2;
-//   }
-//   if(session3.isNotEmpty){
-//     user3 = SettingsData.getUser3;
-//   }
-// }
 

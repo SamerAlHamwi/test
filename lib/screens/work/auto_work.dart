@@ -104,16 +104,16 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
       _isLoadingProcesses = true;
     });
     if(SettingsData.getSession1.isNotEmpty){
-      await Utils.getMyProcesses(0);
+      await Utils.getMyProcesses(0,isWithRefresh: false);
     }
     if(SettingsData.getSession2.isNotEmpty){
-      await Utils.getMyProcesses(1);
+      await Utils.getMyProcesses(1,isWithRefresh: false);
     }
     if(SettingsData.getSession3.isNotEmpty){
-      await Utils.getMyProcesses(2);
+      await Utils.getMyProcesses(2,isWithRefresh: false);
     }
     if(SettingsData.getSession4.isNotEmpty){
-      await Utils.getMyProcesses(3);
+      await Utils.getMyProcesses(3,isWithRefresh: false);
     }
 
     setState(() {
@@ -171,8 +171,9 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
               }
               break;
             case 6:
+              print(SettingsData.getSession4);
               if (SettingsData.getSession4.isNotEmpty) {
-                CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT![1].pROCESSID!, 3);
+                CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT![0].pROCESSID!, 3);
               }
               break;
             case 7:
@@ -181,6 +182,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
               }
               break;
           }
+          refreshProcesses();
         }
       }
     });
