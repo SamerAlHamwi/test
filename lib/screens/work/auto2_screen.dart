@@ -24,7 +24,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
 
   bool _isLoading = false;
   bool _isLoadingProcesses = false;
-  List<int> minutes = [3,9,15,21,27,33,39,45,51,57];
+  List<int> minutes = [3,9,15,21,26,27,33,39,45,51,57];
   // List<int> minutes = [2,8,14,20,26,32,38,44,50,56];
 
   @override
@@ -129,13 +129,11 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     });
 
     int first = SettingsData.getTime();
-    int second = SettingsData.getTime2();
-
 
     const durationLimit = Duration(minutes: 120);
     DateTime startTime = DateTime.now();
 
-    _captchaTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
+    _captchaTimer = Timer.periodic(const Duration(milliseconds: 100), (Timer timer) async {
       Duration elapsedTime = DateTime.now().difference(startTime);
 
       if (elapsedTime >= durationLimit) {
@@ -148,20 +146,19 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
 
       DateTime now = CaptchaUtils.getCurrentTime();
 
-      if ((minutes.contains(now.minute) && now.second == first) || (minutes.contains(now.minute) && now.second == second)) {
-        await Future.delayed(const Duration(milliseconds: 125));
+      if (minutes.contains(now.minute) && now.second == first && isInBetween(now.millisecond) ) {
         if (SettingsData.getSession1.isNotEmpty) {
           CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
         }
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 200));
         if (SettingsData.getSession2.isNotEmpty) {
           CaptchaUtils.getCaptcha(SettingsData.getProcesses2!.pRESULT![0].pROCESSID!, 1);
         }
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 200));
         if (SettingsData.getSession3.isNotEmpty) {
           CaptchaUtils.getCaptcha(SettingsData.getProcesses3!.pRESULT![0].pROCESSID!, 2);
         }
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 200));
         if (SettingsData.getSession4.isNotEmpty) {
           CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT![0].pROCESSID!, 3);
         }
@@ -178,6 +175,15 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
       print('AutoCaptcha stopped manually');
       Phoenix.rebirth(context);
     }
+  }
+
+  bool isInBetween(int current){
+    int second = SettingsData.getTime2();
+    int s2 = second + 100;
+    if(current >= second && current <= s2){
+      return true;
+    }
+    return false;
   }
 
 

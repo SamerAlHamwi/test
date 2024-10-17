@@ -22,7 +22,6 @@ class Utils {
   static getHeaders(AliasEnum type,int userIndex){
     String session = '';
 
-
     String alias;
     switch(type){
       case AliasEnum.add:
@@ -37,15 +36,28 @@ class Utils {
         alias = 'OPSfpsWfkvps';
       case AliasEnum.none:
         alias = '';
-
-      //OPSyGCrxPB notifications
     }
 
-    final Map<String,String> headers = {
+    switch (userIndex){
+      case 0:
+        session = SettingsData.getSession1;
+        break;
+      case 1:
+        session = SettingsData.getSession2;
+        break;
+      case 2:
+        session = SettingsData.getSession3;
+        break;
+      case 3:
+        session = SettingsData.getSession4;
+        break;
+    }
+
+    final Map<String,dynamic> headers = {
       'Content-Type': 'application/json'
     };
 
-    // if(!SettingsData.getType){
+    if(!SettingsData.isMobile){
       headers.addAll({
         'Accept': 'application/json, text/plain, */*',
         'Accept-Encoding': 'gzip, deflate, br, zstd',
@@ -61,47 +73,19 @@ class Utils {
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Site': 'same-site',
         'Source': 'WEB',
+        'Sec-Ch-Ua-Platform': 'Windows',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/531.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/531.36 Edg/129.0.0.0',
       });
+    }
+    else{
+      headers.addAll({
+        'Source': 'API',
+        'Version': 2,
+        'Authorization': session,
+      });
+    }
     //As Edge
     //'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0',
-    // }else{
-    //   headers.addAll({
-    //     'Source': 'API',
-    //     'Version': 2,
-    //     'Authorization': session,
-    //   });
-    // }
-
-    switch (userIndex){
-      case 0:
-        session = SettingsData.getSession1;
-        headers.addAll({
-          'Sec-Ch-Ua-Platform': 'macOS',
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11.15; rv:129.0) Gecko/20110101 Firefox/128.0',
-        });
-        break;
-      case 1:
-        session = SettingsData.getSession2;
-        headers.addAll({
-          'Sec-Ch-Ua-Platform': 'Windows',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/531.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/531.36 Edg/129.0.0.0',
-        });
-        break;
-      case 2:
-        session = SettingsData.getSession3;
-        headers.addAll({
-          'Sec-Ch-Ua-Platform': 'Windows',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/533.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/533.36 Edg/128.0.0.0',
-        });
-        break;
-      case 3:
-        session = SettingsData.getSession4;
-        headers.addAll({
-          'Sec-Ch-Ua-Platform': 'Windows',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/532.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/532.36 Edg/127.0.0.0',
-        });
-        break;
-    }
 
     if(alias.isNotEmpty){
       headers.addAll({
@@ -109,7 +93,7 @@ class Utils {
       });
     }
 
-    if(session.isNotEmpty){ // && !SettingsData.getType
+    if(!SettingsData.isMobile){
       headers.addAll({
         'Cookie': 'SESSION=$session',
       });
@@ -259,6 +243,89 @@ class Utils {
     }
 
     return null;
+  }
+
+  static addProcess(Map model) async {
+    const addTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
+
+    final Dio dio = DioClient.getDio();
+
+    try {
+      final response = await dio.post(
+        addTransactionsUrl,
+        options: Utils.getOptions(AliasEnum.add,0),
+        data: model,
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = response.data;
+        showTopSnackBar(
+          Overlay.of(Keys.overlayKey.currentState!.context),
+          CustomSnackBar.success(
+            message: 'تمت إضافة المعاملة بنجاح',
+          ),
+        );
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+      String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
+
+      showTopSnackBar(
+        Overlay.of(Keys.overlayProcessKey.currentState!.context),
+        CustomSnackBar.error(
+          message: errorMessage,
+        ),
+      );
+
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static deleteProcess(int id) async {
+    const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
+
+    final Dio dio = DioClient.getDio();
+
+    try {
+      final response = await dio.post(
+          getTransactionsUrl,
+          options: Utils.getOptions(AliasEnum.delete,0),
+          data: {
+            "ALIAS": "OPMEShwoqV",
+            "P_USERNAME": "WebSite",
+            "P_ID": id
+          }
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = response.data;
+        showTopSnackBar(
+          Overlay.of(Keys.overlayKey.currentState!.context),
+          CustomSnackBar.success(
+            message: 'تم حذف المعاملة بنجاح',
+          ),
+        );
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+      String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
+
+      showTopSnackBar(
+        Overlay.of(Keys.overlayKey.currentState!.context),
+        CustomSnackBar.error(
+          message: errorMessage,
+        ),
+      );
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 
 

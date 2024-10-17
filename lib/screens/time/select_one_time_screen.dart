@@ -18,7 +18,7 @@ class SelectOneTimeScreen extends StatefulWidget {
 class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
 
   int time = 0;
-  int time2 = 0;
+  int time2 = 100;
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('اختر ثانيتين للحرق'),
+        title: const Text('الحرق'),
         centerTitle: false,
       ),
       body: Padding(
@@ -62,6 +62,7 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //////////////
+            const Text('اختر ثانية الكبسة'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -92,6 +93,7 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
               ],
             ),
             const SizedBox(height: 10,),
+            const Text('اختر جزء الكبسة'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -99,8 +101,8 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
                   icon: const Icon(Icons.remove),
                   onPressed: (){
                     setState(() {
-                      if (time2 > 0) {
-                        time2--;
+                      if (time2 > 199) {
+                        time2 = time2 - 100;
                       }
                     });
                   },
@@ -113,13 +115,18 @@ class _SelectOneTimeScreenState extends State<SelectOneTimeScreen> {
                   icon: const Icon(Icons.add),
                   onPressed: (){
                     setState(() {
-                      if (time2 < 60) {
-                        time2++;
+                      if (time2 < 900) {
+                        time2 = time2 + 100;
                       }
                     });
                   },
                 ),
               ],
+            ),
+            const SizedBox(height: 10,),
+            const Text(
+                'سيقوم الكود بالضغط على كل المعاملات بدءاً من جزء الكبسة وبزيادة جزئين لكل حساب',
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10,),
 

@@ -74,7 +74,7 @@ class _MessageStreamWidgetState extends State<MessageStreamWidget> {
   }
 
   getTextColor(List messages,int index){
-    if(messages[index].contains('تم')){
+    if(messages[index].contains('التثبيت')){
       return Colors.green;
     }else if(messages[index].contains('Get')){
       return Colors.blue;

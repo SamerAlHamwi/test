@@ -165,7 +165,7 @@ class SettingsData {
   static String get getSession3 => box.read(tokenKey3) ?? '';
   static String get getSession4 => box.read(tokenKey4) ?? '';
   static String get getAlias => '';
-  static bool get getType => box.read(typeKey) ?? false;
+  static bool get isMobile => box.read(typeKey) ?? false;
 
   static String get getUser1Id1 => getProcesses1!.pRESULT!.isNotEmpty ? getProcesses1!.pRESULT![0].pROCESSID.toString() : "";
   static String get getUser1Id2 => getProcesses1!.pRESULT!.length > 1 ? getProcesses1!.pRESULT![1].pROCESSID.toString() : "";

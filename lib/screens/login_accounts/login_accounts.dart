@@ -90,6 +90,35 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
                 },
                 child: _isLoading ? const Text('يتم التحميل...') : const Text('تسجيل الدخول'),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                      'Web'
+                  ),
+                  const SizedBox(width: 8,),
+                  Switch(
+                    value: SettingsData.isMobile,
+                    activeColor: Colors.blueAccent,
+                    onChanged: (bool value){
+                      setState(() {
+                        SettingsData.setType(value);
+                      });
+                    },
+                  ),
+                  const SizedBox(width: 8,),
+                  const Text(
+                      'Mobile'
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),
@@ -98,7 +127,7 @@ class _LoginPhonePasswordScreenState extends State<LoginPhonePasswordScreen> {
   }
 //
 
-  List<String> suggestion = ['0945718880'];
+  List<String> suggestion = [];
 
 
   getPhoneNumberTextField(int index){
@@ -203,39 +232,43 @@ Future<bool> login({required String userName,required String password,required i
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.data;
+        late String? sessionValue;
 
-        String session = response.headers['set-cookie']?.first as String;
-        RegExp regExp = RegExp(r'SESSION=([^;]+)');
-        Match? match = regExp.firstMatch(session);
-        if (match != null) {
-          String sessionValue = match.group(1)!;
-          LoginModel model = LoginModel.fromJson(data);
-          SettingsData.addSavedUser(UserModel(phoneNumber: userName, password: password));
-          switch(index){
-            case 0:
-              SettingsData.setSession1(sessionValue);
-              SettingsData.setUser1(data);
-              break;
-            case 1:
-              SettingsData.setSession2(sessionValue);
-              SettingsData.setUser2(data);
-              break;
-            case 2:
-              SettingsData.setSession3(sessionValue);
-              SettingsData.setUser3(data);
-              break;
-            case 3:
-              SettingsData.setSession4(sessionValue);
-              SettingsData.setUser4(data);
-              break;
-          }
-          showTopSnackBar(
-            Overlay.of(context),
-            CustomSnackBar.success(
-              message: 'مرحباً ${model.pPROFILERESULT!.fULLNAME} تم تسجيل الدخول بنجاح، جاري تحضير المعاملات ',
-            ),
-          );
+        if(SettingsData.isMobile){
+          sessionValue = response.headers['authorization']?.first as String;
+        }else{
+          String session = response.headers['set-cookie']?.first as String;
+          RegExp regExp = RegExp(r'SESSION=([^;]+)');
+          Match? match = regExp.firstMatch(session);
+          sessionValue = match!.group(1)!;
         }
+
+        LoginModel model = LoginModel.fromJson(data);
+        SettingsData.addSavedUser(UserModel(phoneNumber: userName, password: password));
+        switch(index){
+          case 0:
+            SettingsData.setSession1(sessionValue);
+            SettingsData.setUser1(data);
+            break;
+          case 1:
+            SettingsData.setSession2(sessionValue);
+            SettingsData.setUser2(data);
+            break;
+          case 2:
+            SettingsData.setSession3(sessionValue);
+            SettingsData.setUser3(data);
+            break;
+          case 3:
+            SettingsData.setSession4(sessionValue);
+            SettingsData.setUser4(data);
+            break;
+        }
+        showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.success(
+            message: 'مرحباً ${model.pPROFILERESULT!.fULLNAME} تم تسجيل الدخول بنجاح، جاري تحضير المعاملات ',
+          ),
+        );
 
         setState(() {});
         bool isSuccess = await Utils.getMyProcesses(index);
