@@ -182,7 +182,7 @@ class _AutoWorkScreenState extends State<AutoWorkScreen> with AutomaticKeepAlive
               }
               break;
           }
-          refreshProcesses();
+          // refreshProcesses();
         }
       }
     });

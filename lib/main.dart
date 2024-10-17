@@ -53,8 +53,8 @@ class MyApp extends StatelessWidget {
         key: Keys.overlayKey,
         initialEntries: [
           OverlayEntry(
-            builder: (context) => SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
-            // builder: (context) => const PasswordScreen(),
+            // builder: (context) => SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
+            builder: (context) => const PasswordScreen(),
           ),
         ],
       ),
