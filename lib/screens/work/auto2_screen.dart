@@ -24,7 +24,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
 
   bool _isLoading = false;
   bool _isLoadingProcesses = false;
-  List<int> minutes = [3,9,15,21,26,27,33,39,45,51,57];
+  List<int> minutes = [3,9,15,21,27,33,39,45,51,57];
   // List<int> minutes = [2,8,14,20,26,32,38,44,50,56];
 
   @override

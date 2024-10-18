@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:king/screens/login_accounts/login_accounts.dart';
 import 'package:king/screens/mobile/add_process/add_process_screen.dart';
+import 'package:king/screens/mobile/processes/widgets/process_widget.dart';
 import 'package:king/screens/mobile/processes/widgets/row_info_widget.dart';
 import 'package:king/screens/settings/settings.dart';
 import 'package:king/utils/keys.dart';
@@ -52,71 +53,55 @@ class _ProcessScreenState extends State<ProcessScreen> with AutomaticKeepAliveCl
         padding: const EdgeInsets.only(bottom: 65.0),
         child: SingleChildScrollView(
           child: Column(
-            children: List.generate(
-                SettingsData.getProcesses1!.pRECORDCOUNT!,
-                    (index) => Container(
-                  width: width,
-                  padding: const EdgeInsets.only(top: 16,right: 8,left: 8,bottom: 16),
-                  margin: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.black,
-                          spreadRadius: 0.001,
-                          blurRadius: 1
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      rowInfo(name: 'رقم المعاملة', data: SettingsData.getProcesses1!.pRESULT![index].pROCESSNO ?? ''),
-                      getDivider(),
-                      rowInfo(name: 'نوع المعاملة', data: SettingsData.getProcesses1!.pRESULT![index].zPROCESSNAME ?? ''),
-                      getDivider(),
-                      rowInfo(name: 'صاحب العلاقة', data: SettingsData.getProcesses1!.pRESULT![index].pPOWNER ?? ''),
-                      getDivider(),
-                      rowInfo(name: 'مركز التسليم', data: SettingsData.getProcesses1!.pRESULT![index].zCENTERNAME ?? ''),
-                      getDivider(),
-                      rowInfo(name: 'حالة المعاملة', data: SettingsData.getProcesses1!.pRESULT![index].zSTATUSNAME ?? ''),
-                      getDivider(),
-                      rowInfo(name: 'ملاحظات', data: SettingsData.getProcesses1!.pRESULT![index].zSTATUSNOTE ?? ''),
-                      getDivider(),
-                      const SizedBox(height: 10,),
-                      ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            isLoadingDelete = true;
-                          });
-                          await Utils.deleteProcess(SettingsData.getProcesses1!.pRESULT![index].pROCESSID!);
-                          await Utils.getMyProcesses(0);
-                          setState(() {
-                            isLoadingDelete = false;
-                          });
-                        },
-                        child: isLoadingDelete
-                            ? const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2.0,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Text('Loading...'),
-                          ],
-                        )
-                            : const Text('حذف'),
-                      ),
-                    ],
-                  ),
-                )
-            ),
+            children: [
+              if(SettingsData.getSession1.isNotEmpty)
+              ...List.generate(
+                  SettingsData.getProcesses1!.pRECORDCOUNT!,
+                      (index) => ProcessWidget(
+                          model: SettingsData.getProcesses1!.pRESULT![index],
+                          userIndex: 0,
+                          onDelete: () async {
+                            await Utils.getMyProcesses(0);
+                            setState(() {});
+                          })
+              ),
+              getDivider(),
+              if(SettingsData.getSession2.isNotEmpty)
+                ...List.generate(
+                  SettingsData.getProcesses2!.pRECORDCOUNT!,
+                      (index) => ProcessWidget(
+                      model: SettingsData.getProcesses2!.pRESULT![index],
+                      userIndex: 1,
+                      onDelete: () async {
+                        await Utils.getMyProcesses(1);
+                        setState(() {});
+                      })
+              ),
+              getDivider(),
+              if(SettingsData.getSession3.isNotEmpty)
+                ...List.generate(
+                  SettingsData.getProcesses3!.pRECORDCOUNT!,
+                      (index) => ProcessWidget(
+                      model: SettingsData.getProcesses3!.pRESULT![index],
+                      userIndex: 2,
+                      onDelete: () async {
+                        await Utils.getMyProcesses(2);
+                        setState(() {});
+                      })
+              ),
+              getDivider(),
+              if(SettingsData.getSession4.isNotEmpty)
+                ...List.generate(
+                  SettingsData.getProcesses4!.pRECORDCOUNT!,
+                      (index) => ProcessWidget(
+                      model: SettingsData.getProcesses4!.pRESULT![index],
+                      userIndex: 3,
+                      onDelete: () async {
+                        await Utils.getMyProcesses(3);
+                        setState(() {});
+                      })
+              ),
+            ]
           ),
         ),
       ),
@@ -138,20 +123,13 @@ class _ProcessScreenState extends State<ProcessScreen> with AutomaticKeepAliveCl
           FloatingActionButton(
             heroTag: '2',
             onPressed: () async {
-              setState(() {
-                isLoadingRefresh = true;
-              });
-              await Utils.getMyProcesses(0);
-              setState(() {
-                isLoadingRefresh = false;
-              });
+              Utils.getMyProcesses(0);
+              Utils.getMyProcesses(1);
+              Utils.getMyProcesses(3);
+              Utils.getMyProcesses(4);
             },
             backgroundColor: Colors.blue,
-            child: isLoadingRefresh
-                ? const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            )
-                : const Icon(
+            child: const Icon(
               Icons.refresh_outlined,
               color: Colors.white,
             ),
@@ -160,8 +138,6 @@ class _ProcessScreenState extends State<ProcessScreen> with AutomaticKeepAliveCl
           FloatingActionButton(
             heroTag: '4',
             onPressed: () async {
-              // await SettingsData.logout();
-              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const LoginPhonePasswordScreen()));
               Navigator.pop(context);
             },
             backgroundColor: Colors.red,
@@ -175,7 +151,6 @@ class _ProcessScreenState extends State<ProcessScreen> with AutomaticKeepAliveCl
     );
   }
 
-
   Container getDivider(){
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
@@ -183,6 +158,7 @@ class _ProcessScreenState extends State<ProcessScreen> with AutomaticKeepAliveCl
       color: Colors.black26,
     );
   }
+
 
 
   @override

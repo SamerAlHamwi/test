@@ -1,9 +1,9 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:king/screens/settings/settings.dart';
 import 'package:king/utils/keys.dart';
 import 'package:king/utils/utils.dart';
-
 import 'models/add_process_model.dart';
 
 
@@ -103,7 +103,44 @@ class _AddProcessScreenState extends State<AddProcessScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      if(_selectedNumber != null && _selectedString != null && _selectedPriority != null){
+                      if (SettingsData.getSession1.isNotEmpty && _selectedNumber != null && _selectedString != null && _selectedPriority != null) {
+                      AddProcessModel model = AddProcessModel(
+                        id: _selectedLocation!,
+                        pMATECOUNT: _selectedNumber,
+                        pPASSPORTTYPE: _selectedPriority.toString(),
+                      );
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await Utils.addProcess(model.toJson(),context,0);
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      }
+                    },
+                    child: _isLoading
+                        ? const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.0,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text('Loading...'),
+                      ],
+                    )
+                        : const Text('إضافة للحساب الأول'),
+
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if(SettingsData.getSession2.isNotEmpty && _selectedNumber != null && _selectedString != null && _selectedPriority != null){
                         AddProcessModel model = AddProcessModel(
                           id: _selectedLocation!,
                           pMATECOUNT: _selectedNumber,
@@ -112,8 +149,7 @@ class _AddProcessScreenState extends State<AddProcessScreen> {
                         setState(() {
                           _isLoading = true;
                         });
-                        // print(model.toJson());
-                        await Utils.addProcess(model.toJson());
+                        await Utils.addProcess(model.toJson(),context,1);
                         setState(() {
                           _isLoading = false;
                         });
@@ -135,7 +171,79 @@ class _AddProcessScreenState extends State<AddProcessScreen> {
                         Text('Loading...'),
                       ],
                     )
-                        : const Text('إضافة'),
+                        : const Text('إضافة للحساب الثاني'),
+
+                  ),const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if(SettingsData.getSession3.isNotEmpty && _selectedNumber != null && _selectedString != null && _selectedPriority != null){
+                        AddProcessModel model = AddProcessModel(
+                          id: _selectedLocation!,
+                          pMATECOUNT: _selectedNumber,
+                          pPASSPORTTYPE: _selectedPriority.toString(),
+                        );
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        await Utils.addProcess(model.toJson(),context,2);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    },
+                    child: _isLoading
+                        ? const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.0,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text('Loading...'),
+                      ],
+                    )
+                        : const Text('إضافة للحساب الثالث'),
+
+                  ),const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if(SettingsData.getSession4.isNotEmpty && _selectedNumber != null && _selectedString != null && _selectedPriority != null){
+                        AddProcessModel model = AddProcessModel(
+                          id: _selectedLocation!,
+                          pMATECOUNT: _selectedNumber,
+                          pPASSPORTTYPE: _selectedPriority.toString(),
+                        );
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        await Utils.addProcess(model.toJson(),context,3);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    },
+                    child: _isLoading
+                        ? const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.0,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text('Loading...'),
+                      ],
+                    )
+                        : const Text('إضافة للحساب الرابع'),
 
                   ),
 

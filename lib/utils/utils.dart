@@ -245,7 +245,7 @@ class Utils {
     return null;
   }
 
-  static addProcess(Map model) async {
+  static addProcess(Map model,BuildContext context,int userIndex) async {
     const addTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
 
     final Dio dio = DioClient.getDio();
@@ -260,7 +260,7 @@ class Utils {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = response.data;
         showTopSnackBar(
-          Overlay.of(Keys.overlayKey.currentState!.context),
+          Overlay.of(context),
           CustomSnackBar.success(
             message: 'تمت إضافة المعاملة بنجاح',
           ),
@@ -273,7 +273,7 @@ class Utils {
       String errorMessage = e.response?.data['Message'] ?? 'An unexpected error occurred.';
 
       showTopSnackBar(
-        Overlay.of(Keys.overlayProcessKey.currentState!.context),
+        Overlay.of(context),
         CustomSnackBar.error(
           message: errorMessage,
         ),
@@ -285,7 +285,7 @@ class Utils {
     }
   }
 
-  static deleteProcess(int id) async {
+  static deleteProcess(int id,int userIndex) async {
     const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
 
     final Dio dio = DioClient.getDio();
@@ -293,7 +293,7 @@ class Utils {
     try {
       final response = await dio.post(
           getTransactionsUrl,
-          options: Utils.getOptions(AliasEnum.delete,0),
+          options: Utils.getOptions(AliasEnum.delete,userIndex),
           data: {
             "ALIAS": "OPMEShwoqV",
             "P_USERNAME": "WebSite",
