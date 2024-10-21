@@ -151,8 +151,7 @@ class _WorkPage3State extends State<WorkPage3> with AutomaticKeepAliveClientMixi
         final Map<String, dynamic> data = response.data;
         final String imageUrl = data['file'];
         Utils.solveCaptcha({
-          'img_url': 'data:image/jpg;base64,$imageUrl',
-          'captcha': 1,
+          'img': 'data:image/jpg;base64,$imageUrl',
         }).then((value){
           if(value != -1){
             reservePassport(id,value);
