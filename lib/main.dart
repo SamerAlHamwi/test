@@ -3,11 +3,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:king/screens/login_accounts/login_accounts.dart';
-import 'package:king/screens/password/password_screen.dart';
+import 'package:king/screens/app_lock/app_lock_screen.dart';
 import 'package:king/screens/settings/settings.dart';
-import 'package:king/screens/work_type/select_work_type_screen.dart';
 import 'package:king/utils/keys.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 
 void main() async {
@@ -15,6 +14,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AudioPlayer.global.setAudioContext(AudioContextConfig(/*...*/).build());
   await SettingsData.init();
+  const keyApplicationId = 'dPcwSslm2ETuGAjSkOfBIj6tLkhEXKbaI1oPciV1';
+  const keyClientKey = 'oBiOybDbm3VfgPjo8vUpUHtzKFMzEk1c7c6nav5l';
+  const keyParseServerUrl = 'https://parseapi.back4app.com';
+  await Parse().initialize(keyApplicationId, keyParseServerUrl,clientKey: keyClientKey, debug: true);
 
   runApp(Phoenix(child: const MyApp()));
 
@@ -54,7 +57,7 @@ class MyApp extends StatelessWidget {
         initialEntries: [
           OverlayEntry(
             // builder: (context) => SettingsData.hasToken() ? const SelectWorkType() : const LoginPhonePasswordScreen(),
-            builder: (context) => const PasswordScreen(),
+            builder: (context) => const AppLockScreen(),
           ),
         ],
       ),
