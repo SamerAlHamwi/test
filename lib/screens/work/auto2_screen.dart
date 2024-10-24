@@ -24,8 +24,6 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
 
   bool _isLoading = false;
   bool _isLoadingProcesses = false;
-  List<int> minutes = [3,9,15,21,27,33,39,45,51,57];
-  // List<int> minutes = [2,8,14,20,26,32,38,44,50,56];
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +144,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
 
       DateTime now = CaptchaUtils.getCurrentTime();
 
-      if (minutes.contains(now.minute) && now.second == first && isInBetween(now.millisecond) ) {
+      if (now.second == first && isInBetween(now.millisecond) ) { // minutes.contains(now.minute) &&
         if (SettingsData.getSession1.isNotEmpty) {
           CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
         }
