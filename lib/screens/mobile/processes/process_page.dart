@@ -123,10 +123,18 @@ class _ProcessScreenState extends State<ProcessScreen> with AutomaticKeepAliveCl
           FloatingActionButton(
             heroTag: '2',
             onPressed: () async {
-              Utils.getMyProcesses(0);
-              Utils.getMyProcesses(1);
-              Utils.getMyProcesses(3);
-              Utils.getMyProcesses(4);
+              Utils.getMyProcesses(0).then((value){
+                setState(() {});
+              });
+              Utils.getMyProcesses(1).then((value){
+                setState(() {});
+              });;
+              Utils.getMyProcesses(2).then((value){
+                setState(() {});
+              });
+              Utils.getMyProcesses(3).then((value){
+                setState(() {});
+              });
             },
             backgroundColor: Colors.blue,
             child: const Icon(

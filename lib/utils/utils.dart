@@ -143,7 +143,7 @@ class Utils {
   }
 
 
-  static getMyProcesses(int userIndex,{bool isWithRefresh = true}) async {
+  static Future getMyProcesses(int userIndex,{bool isWithRefresh = true}) async {
     const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
 
     final Dio dio = DioClient.getDio();
@@ -261,7 +261,7 @@ class Utils {
         final Map<String, dynamic> data = response.data;
         showTopSnackBar(
           Overlay.of(context),
-          CustomSnackBar.success(
+          const CustomSnackBar.success(
             message: 'تمت إضافة المعاملة بنجاح',
           ),
         );
