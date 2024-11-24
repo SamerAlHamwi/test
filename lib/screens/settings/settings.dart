@@ -23,8 +23,12 @@ class SettingsData {
   static String userKey4 = 'user4';
   static String typeKey = 'type';
   static String timesKey = 'times';
-  static String timeKey = 'time';
+  static String timeKey = 'time1';
   static String time2Key = 'time2';
+  static String time3Key = 'time3';
+  static String milli1Key = 'milli1';
+  static String milli2Key = 'milli2';
+  static String milli3Key = 'milli3';
   static String countDownTimeKey = 'countDownTime';
   static String usersKey = 'users';
 
@@ -42,11 +46,11 @@ class SettingsData {
     return box.read(countDownTimeKey) ?? 0;
   }
 
-  static setTime(int time){
+  static setTime1(int time){
     box.write(timeKey, time);
   }
 
-  static getTime(){
+  static getTime1(){
     return box.read(timeKey) ?? 0;
   }
 
@@ -56,6 +60,38 @@ class SettingsData {
 
   static getTime2(){
     return box.read(time2Key) ?? 0;
+  }
+
+  static setTime3(int time2){
+    box.write(time3Key, time2);
+  }
+
+  static getTime3(){
+    return box.read(time3Key) ?? 0;
+  }
+
+  static setMilli1(int time2){
+    box.write(milli1Key, time2);
+  }
+
+  static getMilli1(){
+    return box.read(milli1Key) ?? 0;
+  }
+
+  static setMilli2(int time2){
+    box.write(milli2Key, time2);
+  }
+
+  static getMilli2(){
+    return box.read(milli2Key) ?? 0;
+  }
+
+  static setMilli3(int time2){
+    box.write(milli3Key, time2);
+  }
+
+  static getMilli3(){
+    return box.read(milli3Key) ?? 0;
   }
 
   static setTimes(List times){

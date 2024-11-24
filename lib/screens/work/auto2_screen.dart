@@ -80,6 +80,14 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
     );
   }
 
+  @override
+  dispose(){
+    if(_captchaTimer != null){
+      _captchaTimer!.cancel();
+    }
+    super.dispose();
+  }
+
   getCaptchaForAllUsers() async {
     if(SettingsData.getSession1.isNotEmpty){
       CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT!.first.pROCESSID!,0);
@@ -126,7 +134,9 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
       _isLoading = true;
     });
 
-    int first = SettingsData.getTime();
+    int one = SettingsData.getTime1();
+    int two = SettingsData.getTime2();
+    int three = SettingsData.getTime3();
 
     const durationLimit = Duration(minutes: 120);
     DateTime startTime = DateTime.now();
@@ -144,7 +154,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
 
       DateTime now = CaptchaUtils.getCurrentTime();
 
-      if (now.second == first && isInBetween(now.millisecond) ) { // minutes.contains(now.minute) &&
+      if (isCorrectSecond(one,two,three,now.second) && isInBetween(now.millisecond) ) {
         if (SettingsData.getSession1.isNotEmpty) {
           CaptchaUtils.getCaptcha(SettingsData.getProcesses1!.pRESULT![0].pROCESSID!, 0);
         }
@@ -161,6 +171,7 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
           CaptchaUtils.getCaptcha(SettingsData.getProcesses4!.pRESULT![0].pROCESSID!, 3);
         }
       }
+
     });
   }
 
@@ -173,6 +184,13 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
       print('AutoCaptcha stopped manually');
       Phoenix.rebirth(context);
     }
+  }
+
+  bool isCorrectSecond(int one,int two,int three,int now){
+    if(now == one || now == two || now == three){
+      return true;
+    }
+    return false;
   }
 
   bool isInBetween(int current){

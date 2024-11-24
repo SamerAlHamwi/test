@@ -40,8 +40,7 @@ class CaptchaUtils{
         final Map<String, dynamic> data = response.data;
         final String imageUrl = data['file'];
         Utils.solveCaptcha({
-          'img_url': 'data:image/jpg;base64,$imageUrl',
-          'captcha': 1,
+          'img': 'data:image/jpg;base64,$imageUrl',
         }).then((value){
           if(value != -1){
             reservePassport(id,value,userIndex);
@@ -53,6 +52,7 @@ class CaptchaUtils{
         return false;
       }
     } on DioException catch (e) {
+      print(e);
       String errorMessage = e.response?.data['Message'] ?? 'حدث خطأ اثناء طلب المعادلة';
 
       if(errorMessage.contains('تجاوزت') || errorMessage.contains('معالجة')){
@@ -66,6 +66,7 @@ class CaptchaUtils{
       }
       return false;
     } catch (e) {
+      print(e);
       MessagesUtils.addNewMessage(e.toString());
       return false;
     } finally {

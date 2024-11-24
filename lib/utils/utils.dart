@@ -60,21 +60,14 @@ class Utils {
     if(!SettingsData.isMobile){
       headers.addAll({
         'Accept': 'application/json, text/plain, */*',
-        'Accept-Encoding': 'gzip, deflate, br, zstd',
-        'Accept-Language': 'en-US,en;q=0.5',
         'Connection': 'keep-alive',
-        'Cache-Control': 'max-age=0',
-        'Host': 'api.ecsc.gov.sy:8080',
-        'Referer': 'https://www.ecsc.gov.sy/',
-        'Origin': 'https://www.ecsc.gov.sy',
-        'Sec-Ch-Ua': '"Not/A)Brand";v="8", "Chromium";v="127", "Microsoft Edge";v="127"',
+        'Referer': 'https://ecsc.gov.sy/requests',
+        'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
         'Sec-Ch-Ua-Mobile': '?0',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-site',
+        'Sec-Ch-Ua-Platform': '?0',
         'Source': 'WEB',
-        'Sec-Ch-Ua-Platform': 'Windows',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/531.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/531.36 Edg/129.0.0.0',
+        // 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0',
       });
     }
     else{
@@ -84,8 +77,6 @@ class Utils {
         'Authorization': session,
       });
     }
-    //As Edge
-    //'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0',
 
     if(alias.isNotEmpty){
       headers.addAll({
@@ -147,6 +138,29 @@ class Utils {
     const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
 
     final Dio dio = DioClient.getDio();
+
+    switch(userIndex){
+      case 0:
+        if(SettingsData.getSession1.isEmpty){
+          return;
+        }
+        break;
+      case 1:
+        if(SettingsData.getSession2.isEmpty){
+          return;
+        }
+        break;
+      case 2:
+        if(SettingsData.getSession3.isEmpty){
+          return;
+        }
+        break;
+      case 3:
+        if(SettingsData.getSession4.isEmpty){
+          return;
+        }
+        break;
+    }
 
     try {
       final response = await dio.post(
