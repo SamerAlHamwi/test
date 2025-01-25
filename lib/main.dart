@@ -2,7 +2,6 @@
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:king/screens/app_lock/app_lock_screen.dart';
 import 'package:king/screens/settings/settings.dart';
 import 'package:king/utils/keys.dart';
@@ -19,7 +18,7 @@ void main() async {
   const keyParseServerUrl = 'https://parseapi.back4app.com';
   await Parse().initialize(keyApplicationId, keyParseServerUrl,clientKey: keyClientKey, debug: true);
 
-  runApp(Phoenix(child: const MyApp()));
+  runApp(const MyApp());
 
 }
 

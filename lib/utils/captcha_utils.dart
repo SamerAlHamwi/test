@@ -29,7 +29,7 @@ class CaptchaUtils{
 
   static Future<bool> getCaptcha(int id,int userIndex) async {
 
-    final captchaUrl = 'https://api.ecsc.gov.sy:8080/files/fs/captcha/$id';
+    final captchaUrl = 'https://api.ecsc.gov.sy:8443/files/fs/captcha/$id';
 
     final Dio dio = DioClient.getDio();
     MessagesUtils.addNewMessage(MessagesUtils.getCaptchaRequestMessage(userIndex));
@@ -54,7 +54,7 @@ class CaptchaUtils{
     } on DioException catch (e) {
       print(e);
       String errorMessage = e.response?.data['Message'] ?? 'حدث خطأ اثناء طلب المعادلة';
-
+      print(errorMessage);
       if(errorMessage.contains('تجاوزت') || errorMessage.contains('معالجة')){
         MessagesUtils.addNewMessage('تجاوزت/نشاط');
       }else{
@@ -75,7 +75,7 @@ class CaptchaUtils{
   }
 
   static Future<void> reservePassport(int id, int captcha,int userIndex) async {
-    final reserveUrl = 'https://api.ecsc.gov.sy:8080/rs/reserve?id=$id&captcha=$captcha';
+    final reserveUrl = 'https://api.ecsc.gov.sy:8443/rs/reserve?id=$id&captcha=$captcha';
     final Dio dio = DioClient.getDio();
 
     for(int i = 0;i < 3;i++){

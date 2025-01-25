@@ -31,26 +31,26 @@ class _SelectWorkTypeState extends State<SelectWorkType> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(width: MediaQuery.of(context).size.width,),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> const SelectAutoTimesScreen()));
-            },
-            child: const Text('نقر تلقائي'),
-          ),
-          const SizedBox(height: 20,),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> const ManualScreen()));
-            },
-            child: const Text('نقر يدوي'),
-          ),
-          const SizedBox(height: 20,),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> const SelectOneTimeScreen()));
-            },
-            child: const Text('الحرق'),
-          ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     Navigator.push(context, MaterialPageRoute(builder: (context)=> const SelectAutoTimesScreen()));
+          //   },
+          //   child: const Text('نقر تلقائي'),
+          // ),
+          // const SizedBox(height: 20,),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     Navigator.push(context, MaterialPageRoute(builder: (context)=> const ManualScreen()));
+          //   },
+          //   child: const Text('نقر يدوي'),
+          // ),
+          // const SizedBox(height: 20,),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     Navigator.push(context, MaterialPageRoute(builder: (context)=> const SelectOneTimeScreen()));
+          //   },
+          //   child: const Text('الحرق'),
+          // ),
           const SizedBox(height: 20,),
           ElevatedButton(
             onPressed: () async {

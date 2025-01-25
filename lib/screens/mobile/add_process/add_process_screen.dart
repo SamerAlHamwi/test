@@ -138,6 +138,7 @@ class _AddProcessScreenState extends State<AddProcessScreen> {
 
                   ),
                   const SizedBox(height: 20),
+                  /*
                   ElevatedButton(
                     onPressed: () async {
                       if(SettingsData.getSession2.isNotEmpty && _selectedNumber != null && _selectedString != null && _selectedPriority != null){
@@ -173,7 +174,8 @@ class _AddProcessScreenState extends State<AddProcessScreen> {
                     )
                         : const Text('إضافة للحساب الثاني'),
 
-                  ),const SizedBox(height: 20),
+                  ),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
                       if(SettingsData.getSession3.isNotEmpty && _selectedNumber != null && _selectedString != null && _selectedPriority != null){
@@ -209,7 +211,8 @@ class _AddProcessScreenState extends State<AddProcessScreen> {
                     )
                         : const Text('إضافة للحساب الثالث'),
 
-                  ),const SizedBox(height: 20),
+                  ),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
                       if(SettingsData.getSession4.isNotEmpty && _selectedNumber != null && _selectedString != null && _selectedPriority != null){
@@ -246,7 +249,7 @@ class _AddProcessScreenState extends State<AddProcessScreen> {
                         : const Text('إضافة للحساب الرابع'),
 
                   ),
-
+                   */
                 ],
               ),
             ),

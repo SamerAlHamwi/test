@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 import 'package:king/models/alias_enum.dart';
 import 'package:king/screens/settings/settings.dart';
 import 'package:king/utils/dio_client.dart';
@@ -54,29 +54,28 @@ class Utils {
     }
 
     final Map<String,dynamic> headers = {
-      'Content-Type': 'application/json'
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      'Referer': 'https://ecsc.gov.sy/',
+      'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+      'Sec-Ch-Ua-Mobile': '?0',
+      'Sec-Ch-Ua-Platform': 'windows',
+      'Source': 'WEB',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0',
+      'Cookie': 'sl-session=/XHVKy5JUGdodwZfGWSe0w==;SESSION=$session',
+      'Connection': 'keep-alive'
     };
+    // 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
 
-    if(!SettingsData.isMobile){
-      headers.addAll({
-        'Accept': 'application/json, text/plain, */*',
-        'Connection': 'keep-alive',
-        'Referer': 'https://ecsc.gov.sy/requests',
-        'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
-        'Sec-Ch-Ua-Mobile': '?0',
-        'Sec-Ch-Ua-Platform': '?0',
-        'Source': 'WEB',
-        // 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0',
-      });
-    }
-    else{
-      headers.addAll({
-        'Source': 'API',
-        'Version': 2,
-        'Authorization': session,
-      });
-    }
+    // if(!SettingsData.isMobile){
+    // }
+    // else{
+    //   headers.addAll({
+    //     'Source': 'API',
+    //     'Version': 2,
+    //     'Authorization': session,
+    //   });
+    // }
 
     if(alias.isNotEmpty){
       headers.addAll({
@@ -84,39 +83,39 @@ class Utils {
       });
     }
 
-    if(!SettingsData.isMobile){
-      headers.addAll({
-        'Cookie': 'SESSION=$session',
-      });
-    }
+    // if(!SettingsData.isMobile){
+    //   headers.addAll({
+    //     'Cookie': 'SESSION=$session',
+    //   });
+    // }
 
     return headers;
   }
 
 
-  static saveImageToDevice(Uint8List imageBytes,String imageName) async {
-    try {
-      final directory = await getDownloadsDirectory();
-
-      if (directory == null) {
-        return;
-      }
-
-      final imagePath = '${directory.path}/$imageName.jpg';
-
-      final file = File(imagePath);
-
-      if (await file.exists()) {
-        print('exist');
-      }
-      else {
-        await file.writeAsBytes(imageBytes);
-        print('Image saved');
-      }
-    } catch (e) {
-      print('Error saving image');
-    }
-  }
+  // static saveImageToDevice(Uint8List imageBytes,String imageName) async {
+  //   try {
+  //     final directory = await getDownloadsDirectory();
+  //
+  //     if (directory == null) {
+  //       return;
+  //     }
+  //
+  //     final imagePath = '${directory.path}/$imageName.jpg';
+  //
+  //     final file = File(imagePath);
+  //
+  //     if (await file.exists()) {
+  //       print('exist');
+  //     }
+  //     else {
+  //       await file.writeAsBytes(imageBytes);
+  //       print('Image saved');
+  //     }
+  //   } catch (e) {
+  //     print('Error saving image');
+  //   }
+  // }
 
 
   static getOptions(AliasEnum type, int userIndex){
@@ -135,7 +134,7 @@ class Utils {
 
 
   static Future getMyProcesses(int userIndex,{bool isWithRefresh = true}) async {
-    const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
+    const getTransactionsUrl = 'https://api.ecsc.gov.sy:8443/dbm/db/execute';
 
     final Dio dio = DioClient.getDio();
 
@@ -207,7 +206,7 @@ class Utils {
   }
 
   static Future<int> solveCaptcha(Map model) async {
-    const solveUrl = 'http://127.0.0.1:1234/send_api';
+    const solveUrl = 'http://127.0.0.1:7978/send_api';
 
     final Dio dio = DioClient.getDio();
 
@@ -260,7 +259,7 @@ class Utils {
   }
 
   static addProcess(Map model,BuildContext context,int userIndex) async {
-    const addTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
+    const addTransactionsUrl = 'https://api.ecsc.gov.sy:8443/dbm/db/execute';
 
     final Dio dio = DioClient.getDio();
 
@@ -300,7 +299,7 @@ class Utils {
   }
 
   static deleteProcess(int id,int userIndex) async {
-    const getTransactionsUrl = 'https://api.ecsc.gov.sy:8080/dbm/db/execute';
+    const getTransactionsUrl = 'https://api.ecsc.gov.sy:8443/dbm/db/execute';
 
     final Dio dio = DioClient.getDio();
 

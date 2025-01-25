@@ -3,7 +3,6 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:king/screens/login_accounts/login_accounts.dart';
 import 'package:king/utils/captcha_utils.dart';
 import '../../utils/utils.dart';
@@ -182,7 +181,6 @@ class _AutoWorkScreen2State extends State<AutoWorkScreen2> with AutomaticKeepAli
         _isLoading = false;
       });
       print('AutoCaptcha stopped manually');
-      Phoenix.rebirth(context);
     }
   }
 

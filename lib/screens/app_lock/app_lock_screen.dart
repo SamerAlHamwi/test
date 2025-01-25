@@ -46,7 +46,7 @@ class _AppLockScreenState extends State<AppLockScreen> {
 
   checkUser() async {
     String deviceId = (await getDeviceId()) ?? '';
-    QueryBuilder<ParseObject> queryTodo = QueryBuilder<ParseObject>(ParseObject('Users')); //..whereContainsWholeWord('device', deviceId)
+    QueryBuilder<ParseObject> queryTodo = QueryBuilder<ParseObject>(ParseObject('Users'));
     final ParseResponse apiResponse = await queryTodo.query();
     if (apiResponse.success && apiResponse.results != null) {
       List response = apiResponse.results as List<ParseObject>;

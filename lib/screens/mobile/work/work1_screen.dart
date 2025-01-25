@@ -133,7 +133,7 @@ class _WorkPage1State extends State<WorkPage1> with AutomaticKeepAliveClientMixi
       _isLoading = true;
     });
 
-    final captchaUrl = 'https://api.ecsc.gov.sy:8080/files/fs/captcha/$id';
+    final captchaUrl = 'https://api.ecsc.gov.sy:8443/files/fs/captcha/$id';
 
     final Dio dio = DioClient.getDio();
 
@@ -201,7 +201,7 @@ class _WorkPage1State extends State<WorkPage1> with AutomaticKeepAliveClientMixi
   }
 
   Future<void> reservePassport(int id, int captcha) async {
-    final reserveUrl = 'https://api.ecsc.gov.sy:8080/rs/reserve?id=$id&captcha=$captcha';
+    final reserveUrl = 'https://api.ecsc.gov.sy:8443/rs/reserve?id=$id&captcha=$captcha';
     final Dio dio = DioClient.getDio();
 
     for(int i = 0;i < 5;i++){

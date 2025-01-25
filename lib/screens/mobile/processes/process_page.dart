@@ -46,8 +46,6 @@ class _ProcessScreenState extends State<ProcessScreen> with AutomaticKeepAliveCl
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    var width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(bottom: 65.0),
@@ -124,9 +122,9 @@ class _ProcessScreenState extends State<ProcessScreen> with AutomaticKeepAliveCl
             heroTag: '2',
             onPressed: () async {
               await Utils.getMyProcesses(0);
-              await Utils.getMyProcesses(1);
-              await Utils.getMyProcesses(2);
-              await Utils.getMyProcesses(3);
+              // await Utils.getMyProcesses(1);
+              // await Utils.getMyProcesses(2);
+              // await Utils.getMyProcesses(3);
               setState(() {});
             },
             backgroundColor: Colors.blue,

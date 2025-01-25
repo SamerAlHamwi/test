@@ -19,7 +19,7 @@ class CustomImageWidget extends StatelessWidget {
         imageBytes!,
         height: 300,
         width: MediaQuery.of(context).size.width,
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
       ),
     )
         : Container(
