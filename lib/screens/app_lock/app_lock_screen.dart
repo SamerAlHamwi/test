@@ -76,6 +76,7 @@ class _AppLockScreenState extends State<AppLockScreen> {
   }
 
   Future<String?> getDeviceId() async {
+
     var deviceInfo = DeviceInfoPlugin();
 
     if (Platform.isAndroid) {
